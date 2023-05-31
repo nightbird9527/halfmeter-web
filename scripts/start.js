@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const webpack = require('webpack');
 const webpackConfigFactory = require('../config/webpack.config');
 const WebpackDevServer = require('webpack-dev-server');
-const devServerConfigFactory = require('../config/devServer.config');
+const devServerConfigFactory = require('../config/webpackDevServer.config');
 
 const env = process.env.NODE_ENV;
 const webpackConfig = webpackConfigFactory(env);

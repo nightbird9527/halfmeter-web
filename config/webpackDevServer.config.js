@@ -11,5 +11,6 @@ module.exports = function () {
             directory: path.resolve(paths.appPath, './public'),
             publicPath: '/'
         },
+        historyApiFallback: true
     }
 }
