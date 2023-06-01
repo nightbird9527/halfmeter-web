@@ -2,7 +2,7 @@ import React from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import Login from './pages/login'
 import Admin from './pages/admin'
-import NotFound from './pages/notFound'
+import NotFound from './pages/notFound/notFound'
 
 const { Routes, Route } = ReactRouterDOM;
 
