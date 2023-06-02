@@ -7,11 +7,28 @@
     background-size: cover;
 
     .loginBox {
+        display: flex;
         position: absolute;
         top: 50%;
-        left: 50%;
-        width: 40px;
-        height: 40px;
-        background-color: #fff;
+        right: 10%;
+        transform: translateY(-50%);
+        width: 350px;
+        background: linear-gradient(to right, #fddb92 0%, #d1fdff 100%);
+        // opacity: 0.8;
+        padding: 40px 20px;
+        border-radius: 10px;
+
+        .contentContainer {
+            width: 100%;
+            margin: auto;
+
+            .boxTitle {
+                text-align: center;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
     }
 }
