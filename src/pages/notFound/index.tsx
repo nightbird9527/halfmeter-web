@@ -2,7 +2,7 @@ import React from 'react';
 
 const NotFound = () => {
     return (
-        <div>您要访问的页面不存在</div>
+        <h2>您要访问的页面不存在</h2>
     )
 }
 

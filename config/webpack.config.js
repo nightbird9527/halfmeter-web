@@ -78,14 +78,7 @@ module.exports = function (webpackEnv) {
 							sourceMap: isEnvProduction
 								? shouldUseSourceMap
 								: isEnvDevelopment,
-							modules: {
-								mode: (resourcePath) => {
-									if (/global.(scss|sass)$/i.test(resourcePath)) {
-										return "global";
-									}
-									return "local";
-								},
-							},
+							modules: false,
 						},
 						'sass-loader'
 					)
@@ -179,7 +172,11 @@ module.exports = function (webpackEnv) {
 			clean: true
 		},
 		resolve: {
-			extensions: ['.ts', '.tsx', '.jsx', '...']
+			extensions: ['.ts', '.tsx', '.jsx', '...'],
+			alias: {
+				utils$: path.resolve(process.cwd(), './src/utils/index.ts'),
+				src: path.resolve(process.cwd(), './src/')
+			}
 		}
 	}
 }
