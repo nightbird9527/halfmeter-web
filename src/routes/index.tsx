@@ -1,36 +1,45 @@
 import React from 'react'
-import {
-    HomeOutlined,
-    UnorderedListOutlined
-} from '@ant-design/icons'
-import Home from 'src/pages/home';
-import Journal from 'src/pages/journal'
-// import { asyncImport } from 'utils';
+import { Navigate } from 'react-router-dom'
+import Login from 'src/pages/login';
+import Layouts from 'src/pages/layouts';
+import NotFound from 'src/pages/notFound';
+import menuRoutesConfig from './menuRoutes';
 
-// const Home = asyncImport(() => { import('../pages/home/index') });
-// const Journal = asyncImport(() => { import('../pages/journal/index') });
+const getSubRoutes = (subRoutesConfig) => {
+    const result = [];
+    subRoutesConfig.forEach(item => {
+        if (item.index) {
+            const indexRouteItem = {
+                index: true,
+                element: <Navigate to={item.path} />,
+            }
+            result.push(indexRouteItem)
+        }
+        const routeItem = {
+            path: item.path,
+            element: item.element,
+            children: undefined
+        };
+        if (item.children) routeItem.children = getSubRoutes(item.children);
+        result.push(routeItem)
+    })
+    return result
+}
 
-// interface IRouteConfigItem {
-//     label: string,
-//     key: string,
-//     icon: ReactElement,
-//     element?: ReactElement,
-//     children?: IRouteConfigItem
-// }
-
-const routesConfigList = [
+const appRoutesConfig = [
     {
-        label: '首页',
-        key: '/home',
-        icon: <HomeOutlined />,
-        element: <Home />
+        path: 'login',
+        element: <Login />
     },
     {
-        label: '日志',
-        key: '/journal',
-        icon: <UnorderedListOutlined />,
-        element: <Journal />
+        path: '/',
+        element: <Layouts />,
+        children: getSubRoutes(menuRoutesConfig)
+    },
+    {
+        path: '*',
+        element: <NotFound />,
     },
 ]
 
-export default routesConfigList
+export default appRoutesConfig
