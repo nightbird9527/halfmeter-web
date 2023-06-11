@@ -1,38 +1,57 @@
 import React, { useState } from 'react';
 import { Layout, Dropdown, Button, Radio, Space } from 'antd';
+import { DownOutlined, BulbFilled } from '@ant-design/icons';
 import { useAppDispatch } from 'src/redux/hooks';
-import { getCyan, getYellow, changeTheme } from 'src/app/themeSlice';
+import { useNavigate } from "react-router-dom";
+import { changeTheme } from 'src/app/appSlice';
+import { themeConfig } from 'src/constants'
 
 const { Header } = Layout;
 
-const HeaderBar = () => {
-    const [value, setValue] = useState('');
-    const dispatch = useAppDispatch();
+const HeaderBar = (props) => {
+	const { backGroundColor } = props;
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
-    const handleThemeChange = (e) => {
-        setValue(e.target.value)
-        dispatch(changeTheme(e.target.value));
-    }
+	// 切换主题
+	const handleThemeChange = (theme) => {
+		dispatch(changeTheme(theme));
+	}
 
-    const menuItems = [
-        {
-            key: '00',
-            label:
-                <Radio.Group onChange={handleThemeChange} value={value}>
-                    <Space direction="vertical">
-                        <Radio value='yellow'>黄色</Radio>
-                        <Radio value='cyan'>蓝色</Radio>
-                    </Space>
-                </Radio.Group>
-        },
-    ]
-    return (
-        <Header className='header' style={{ backgroundColor: '#999' }}>
-            <div className="header-theme">
-                <Dropdown menu={{ items: menuItems }}><Button>主题</Button></Dropdown>
-            </div>
-        </Header>
-    )
+	// 退出登陆
+	const handleQuit = () => {
+		navigate('/login')
+	}
+
+	const themeMenuItems = Object.keys(themeConfig).map((item, index) => {
+		return {
+			key: index,
+			label: <Button type='text' onClick={() => { handleThemeChange(item) }}>{item}</Button>
+		}
+	})
+	const userMenuItems = [
+		{
+			key: '00',
+			label: <Button type='text'>用户资料</Button>
+		},
+		{
+			key: '01',
+			label: <Button type='text' onClick={handleQuit}>退出登陆</Button>
+		},
+	]
+	return (
+		<Header className='header' style={{ backgroundColor: backGroundColor }}>
+			<div className="header-theme">
+				<Dropdown menu={{ items: themeMenuItems }} placement="bottomLeft"><Button type='text'><BulbFilled />Theme</Button></Dropdown>
+			</div>
+			<div className="header-user">
+				<Dropdown menu={{ items: userMenuItems }} placement="bottomRight"><Button type='link' size='large'>admin<DownOutlined /></Button></Dropdown>
+			</div>
+			<div className="header-weather">
+				蒙古草原，天气晴
+			</div>
+		</Header>
+	)
 }
 
 export default HeaderBar;

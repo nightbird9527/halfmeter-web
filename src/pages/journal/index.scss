@@ -1,0 +1,18 @@
+.journal {
+
+    .journal-form {
+
+    }
+
+    .journal-operatebar {
+        display: flex;
+        margin-bottom: 10px;
+        flex-direction: row-reverse;
+    }
+
+    .journal-pagination {
+        display: flex;
+        margin-top: 10px;
+        flex-direction: row-reverse;
+    }
+}

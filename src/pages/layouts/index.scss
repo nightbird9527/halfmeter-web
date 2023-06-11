@@ -9,4 +9,47 @@
             text-align: center;
         }
     }
+
+    .header {
+        padding: 0 15px;
+
+        .header-theme {
+            float: left;
+
+            button {
+                padding: 0;
+            }
+        }
+
+        .header-weather {
+            float: right;
+            margin-right: 20px;
+        }
+
+        .header-user {
+            float: right;
+        }
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+
+        .content-breadcrumb {
+            padding: 15px;
+        }
+
+        .content-container {
+            height: 100%;
+            background-color: cyan;
+            margin: 0 20px 20px;
+            padding: 20px 20px;
+            border-radius: 10px;
+            transition: all 1s;
+        
+            &:hover {
+                box-shadow: 0px 0px 15px 5px rgba($color: #000000, $alpha: .3);
+            }
+        }
+    }
 }

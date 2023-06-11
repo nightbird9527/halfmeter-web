@@ -4,7 +4,7 @@ const paths = require('./paths');
 module.exports = function () {
     return {
         allowedHosts: 'all',
-        port: 3001,
+        port: 3000,
         open: true,
         hot: true,
         static: {

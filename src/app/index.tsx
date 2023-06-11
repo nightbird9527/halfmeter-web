@@ -1,24 +1,26 @@
 import React from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { ConfigProvider } from 'antd';
-import appRoutesConfig from 'src/routes'
+import { useAppSelector } from 'src/redux/hooks';
+import appRoutesConfig from 'src/routes';
+import {themeConfig} from 'src/constants';
 
 const { useRoutes } = ReactRouterDOM;
 
 const App = () => {
-    return (
-        <ConfigProvider
-            theme={{
-                token: {
-                    colorPrimary: '#00b96b',
-                },
-            }}
-        >
-            {
-                useRoutes(appRoutesConfig)
-            }
-        </ConfigProvider>
-    )
+	const appConfig = useAppSelector(state => state.app);
+	const {antdToken} = themeConfig[appConfig.theme];
+	return (
+		<ConfigProvider
+			theme={{
+				token: antdToken,
+			}}
+		>
+			{
+				useRoutes(appRoutesConfig)
+			}
+		</ConfigProvider>
+	)
 }
 
 export default App;

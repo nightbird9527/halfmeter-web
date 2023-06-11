@@ -26,7 +26,13 @@ const getSubRoutes = (subRoutesConfig) => {
     return result
 }
 
-const appRoutesConfig = [
+interface IAppRouteConfigItem {
+    path: string,
+    element: React.ReactNode,
+    children?: IAppRouteConfigItem[]
+}
+
+const appRoutesConfig: IAppRouteConfigItem[] = [
     {
         path: 'login',
         element: <Login />

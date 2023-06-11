@@ -25,9 +25,10 @@ const getMenuItems = (routesConfigList, prePath) => {
     return result
 }
 
-const SiderBar = () => {
+const SiderBar = (props) => {
+    const {backGroundColor} = props;
     return (
-        <Sider className='sider' style={{ backgroundColor: '#666' }}>
+        <Sider className='sider' style={{ backgroundColor: backGroundColor }}>
             <div className="sider-logo">
                 <h1>lg</h1>
             </div>
@@ -35,7 +36,7 @@ const SiderBar = () => {
                 mode='inline'
                 items={getMenuItems(menuRoutesConfig, null)}
                 theme='light'
-                style={{ backgroundColor: '#666' }}
+                style={{ backgroundColor: backGroundColor }}
             />
         </Sider>
     )

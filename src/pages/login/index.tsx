@@ -1,14 +1,22 @@
 import React from 'react';
 import { Form, Button, Input, Row, Col } from 'antd';
 import { LockFilled, UserOutlined } from '@ant-design/icons';
+import { useNavigate  } from "react-router-dom";
 import './index.scss';
 
 const FormItem = Form.Item;
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
 
+  // 登陆
   const onFinish = (values) => {
     console.log(values);
+  }
+
+  // 游客登陆
+  const handleVisitorLogin = () => {
+    navigate('/')
   }
 
   return (
@@ -39,7 +47,7 @@ const Login: React.FC = () => {
               </Button>
             </Col>
             <Col span={24}>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" onClick={handleVisitorLogin}>
                 游客登录
               </Button>
             </Col>

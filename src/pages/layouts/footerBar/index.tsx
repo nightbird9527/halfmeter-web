@@ -3,9 +3,10 @@ import { Layout } from 'antd';
 
 const { Footer } = Layout;
 
-const FooterBar = () => {
+const FooterBar = (props) => {
+    const {backGroundColor} = props;
     return (
-        <Footer style={{ backgroundColor: '#999' }}>FooterBar</Footer>
+        <Footer style={{ backgroundColor: backGroundColor }}>FooterBar</Footer>
     )
 }
 

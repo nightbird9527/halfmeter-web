@@ -18,7 +18,16 @@ import Role from 'src/pages/authority/role';
 import Resource from 'src/pages/authority/resource';
 import Journal from 'src/pages/journal';
 
-const menuRoutesConfig = [
+interface IMenuRouteConfigItem {
+    label: string,
+    path: string,
+    element?: React.ReactNode,
+    icon?: React.ReactNode,
+    children?: IMenuRouteConfigItem[],
+    index?: boolean
+}
+
+const menuRoutesConfig: IMenuRouteConfigItem[] = [
     {
         label: '首页',
         path: 'home',
@@ -46,6 +55,7 @@ const menuRoutesConfig = [
             {
                 label: '用户管理',
                 path: 'user',
+                index: true,
                 icon: <TeamOutlined />,
                 element: <User />,
             },
