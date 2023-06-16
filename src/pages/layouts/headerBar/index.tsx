@@ -48,7 +48,7 @@ const HeaderBar = (props) => {
 				<Dropdown menu={{ items: userMenuItems }} placement="bottomRight"><Button type='link' size='large'>admin<DownOutlined /></Button></Dropdown>
 			</div>
 			<div className="header-weather">
-				蒙古草原，天气晴
+				晴
 			</div>
 		</Header>
 	)

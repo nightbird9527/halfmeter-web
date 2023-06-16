@@ -1,0 +1,16 @@
+.tag {
+
+    .tag-form {}
+
+    .tag-operatebar {
+        display: flex;
+        margin-bottom: 10px;
+        flex-direction: row-reverse;
+    }
+
+    .tag-pagination {
+        display: flex;
+        margin-top: 10px;
+        flex-direction: row-reverse;
+    }
+}

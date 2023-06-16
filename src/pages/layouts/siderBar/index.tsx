@@ -26,17 +26,17 @@ const getMenuItems = (routesConfigList, prePath) => {
 }
 
 const SiderBar = (props) => {
-    const {backGroundColor} = props;
+    const { backGroundColor, textColor } = props;
     return (
         <Sider className='sider' style={{ backgroundColor: backGroundColor }}>
-            <div className="sider-logo">
-                <h1>lg</h1>
+            <div className="sider-logo" style={{ color: textColor }}>
+                <h1>BMXZ<br />HTGLXT</h1>
             </div>
             <Menu
                 mode='inline'
                 items={getMenuItems(menuRoutesConfig, null)}
                 theme='light'
-                style={{ backgroundColor: backGroundColor }}
+                style={{ backgroundColor: backGroundColor, color: textColor }}
             />
         </Sider>
     )

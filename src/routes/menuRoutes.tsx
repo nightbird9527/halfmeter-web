@@ -11,12 +11,12 @@ import {
 } from '@ant-design/icons'
 
 import Home from 'src/pages/home';
-import Tag from 'src/pages/tag';
-import Artical from 'src/pages/artical';
-import User from 'src/pages/authority/user';
-import Role from 'src/pages/authority/role';
-import Resource from 'src/pages/authority/resource';
-import Journal from 'src/pages/journal';
+import TagManage from 'src/pages/tag';
+import ArticalManage from 'src/pages/artical';
+import UserManage from 'src/pages/authority/user';
+import RoleManage from 'src/pages/authority/role';
+import ResourceManage from 'src/pages/authority/resource';
+import JournalManage from 'src/pages/journal';
 
 interface IMenuRouteConfigItem {
     label: string,
@@ -39,13 +39,13 @@ const menuRoutesConfig: IMenuRouteConfigItem[] = [
         label: '标签',
         path: 'tag',
         icon: <TagsOutlined />,
-        element: <Tag />
+        element: <TagManage />
     },
     {
         label: '文章',
         path: 'artical',
         icon: <ReadOutlined />,
-        element: <Artical />
+        element: <ArticalManage />
     },
     {
         label: '权限管理',
@@ -57,19 +57,19 @@ const menuRoutesConfig: IMenuRouteConfigItem[] = [
                 path: 'user',
                 index: true,
                 icon: <TeamOutlined />,
-                element: <User />,
+                element: <UserManage />,
             },
             {
                 label: '角色管理',
                 path: 'role',
                 icon: <UserSwitchOutlined />,
-                element: <Role />,
+                element: <RoleManage />,
             },
             {
                 label: '资源管理',
                 path: 'resource',
                 icon: <DatabaseOutlined />,
-                element: <Resource />,
+                element: <ResourceManage />,
             }
         ]
     },
@@ -77,7 +77,7 @@ const menuRoutesConfig: IMenuRouteConfigItem[] = [
         label: '日志',
         path: 'journal',
         icon: <UnorderedListOutlined />,
-        element: <Journal />
+        element: <JournalManage />
     },
 ]
 

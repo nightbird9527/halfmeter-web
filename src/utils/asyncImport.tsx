@@ -1,17 +1,8 @@
-import React, { useState } from 'react'
+const a = 1;
+const b = 1;
+const c = 1;
+const d = 1;
+const e = 1;
 
-// interface IAsyncImport {
-// 	(func: any): React.FC
-// }
-
-export const asyncImport = (importFunc) => {
-	return async function () {
-		const [component, setComponent] = useState(null);
-
-		await importFunc().then((module) => {
-			setComponent(module.default)
-		})
-
-		return React.createElement(component)
-	}
-}
+export default a;
+export { b, c, d, e };

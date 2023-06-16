@@ -4,6 +4,8 @@
         "noEmit": true,
         "jsx": "react",
         "baseUrl": "./",
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
         "paths": {
             "utils": [
                 "./src/utils/index.ts"

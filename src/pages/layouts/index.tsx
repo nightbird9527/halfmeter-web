@@ -27,7 +27,7 @@ const getBreadcurmbMap = (menuRoutesConfig, prePath = '') => {
 
 const Layouts = () => {
 	const appConfig = useAppSelector(state => state.app);
-	const { siderBarBgc, headerBgc, footerBgc, contentBgc, contentContainerBgc } = themeConfig[appConfig.theme];
+	const { siderBarBgc, headerBgc, footerBgc, contentBgc, textColor } = themeConfig[appConfig.theme];
 
 	const location = useLocation();
 	const pathSnippets = location.pathname.split('/').filter((i) => i);
@@ -50,14 +50,14 @@ const Layouts = () => {
 
 	return (
 		<Layout className='layout' >
-			<SiderBar backGroundColor={siderBarBgc} />
+			<SiderBar backGroundColor={siderBarBgc} textColor={textColor} />
 			<Layout>
 				<HeaderBar backGroundColor={headerBgc} />
 				<Content className='content' style={{ backgroundColor: contentBgc }}>
 					<div className="content-breadcrumb">
 						<Breadcrumb items={breadcrumbItems} />
 					</div>
-					<div className="content-container" style={{backgroundColor: contentContainerBgc}}>
+					<div className="content-container" >
 						<Outlet />
 					</div>
 				</Content>

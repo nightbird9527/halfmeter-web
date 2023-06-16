@@ -1,7 +1,8 @@
 import React from 'react';
 import { Form, Button, Input, Row, Col } from 'antd';
 import { LockFilled, UserOutlined } from '@ant-design/icons';
-import { useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { request } from 'utils';
 import './index.scss';
 
 const FormItem = Form.Item;
@@ -12,6 +13,15 @@ const Login: React.FC = () => {
   // 登陆
   const onFinish = (values) => {
     console.log(values);
+    const params = {
+      username: 'gufee',
+      password: 123456
+    }
+    request.get('/login', params).then(res => {
+      console.log(res);
+    }).catch(error => {
+      console.log(error);
+    });
   }
 
   // 游客登陆

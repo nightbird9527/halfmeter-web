@@ -11,6 +11,9 @@ module.exports = function () {
             directory: path.resolve(paths.appPath, './public'),
             publicPath: '/'
         },
-        historyApiFallback: true
+        historyApiFallback: true,
+        proxy: {
+            '/bms': 'http://localhost:8080',
+        },
     }
 }

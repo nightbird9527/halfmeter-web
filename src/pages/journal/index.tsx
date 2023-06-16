@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import { Table, Space, Button, Form, Input, Row, Col, Divider, Pagination  } from 'antd';
+import { Table, Space, Button, Form, Input, Row, Col, Divider, Pagination, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import './index.scss'
 
 const FormItem = Form.Item;
+const { TextArea } = Input;
+const modalTitleMap = {
+	'create': '新建',
+	'update': '编辑'
+}
 interface IJournalDataItem {
 	id: string,
 	content: string,
@@ -12,7 +17,7 @@ interface IJournalDataItem {
 	createUser: string,
 }
 
-const Journal = () => {
+const JournalManage = () => {
 	const [form] = Form.useForm()
 	const [selectedKeys, setSelectedKeys] = useState([]);
 	const [dataSource, setDataSource] = useState([]);
@@ -23,6 +28,8 @@ const Journal = () => {
 		pageSize: 10,
 		total: 0,
 	});
+	const [modalVisible, setModalVisible] = useState(false);
+	const [operateType, setOperateType] = useState('create');
 
 	const columns: ColumnsType<IJournalDataItem> = [
 		{
@@ -39,12 +46,16 @@ const Journal = () => {
 			dataIndex: 'createTime',
 		},
 		{
+			title: '发布用户',
+			dataIndex: 'createUser',
+		},
+		{
 			title: '更新时间',
 			dataIndex: 'updateTime',
 		},
 		{
-			title: '发布人',
-			dataIndex: 'createUser',
+			title: '更新用户',
+			dataIndex: 'updateUser',
 		},
 		{
 			title: '操作',
@@ -72,11 +83,13 @@ const Journal = () => {
 	// 新建
 	const handleCreate = (record) => {
 		console.log(record);
+		setModalVisible(true);
 	}
 
 	// 编辑
 	const handleUpdate = (record) => {
 		console.log(record);
+		setRecordData(record);
 	}
 
 	// 删除
@@ -97,11 +110,45 @@ const Journal = () => {
 		console.log(page, pageSize);
 	}
 
+	// Modal提交
+	const handleModalFinish = (values) => {
+		console.log(values);
+	}
+
+	// 关闭Modal
+	const closeModal = () => {
+		if (form.getFieldValue('contentModal')) {
+			const handleSaveAndClose = () => { }
+			const handleDestroy = () => {
+				modal.destroy();
+			}
+			const handleJustClose = () => {
+				modal.destroy();
+				setModalVisible(false)
+			}
+			const modal = Modal.confirm({
+				title: '提示',
+				content: '直接关闭的话内容将不会被保存，确认要继续吗?',
+				footer: (
+					<Row justify='center' style={{ marginTop: '10px' }}>
+						<Space>
+							<Button type='primary' onClick={handleSaveAndClose}>保存并关闭</Button>
+							<Button onClick={handleDestroy}>取消</Button>
+							<Button danger onClick={handleJustClose}>确定</Button>
+						</Space>
+					</Row>
+				)
+			})
+			return
+		}
+		setModalVisible(false)
+	}
+
 	return (
 		<div className="journal">
 			<div className='journal-form'>
 				<Form form={form} onFinish={handleSubmit}>
-					<Row justify='space-around'>
+					<Row>
 						<Col span={8}>
 							<FormItem name='title'><Input placeholder='标题' /></FormItem>
 						</Col>
@@ -122,7 +169,7 @@ const Journal = () => {
 					</Row>
 				</Form>
 			</div>
-			<Divider orientation='center'>❤</Divider>
+			<Divider orientation='center'>🧡🧡🧡</Divider>
 			<div className="journal-operatebar">
 				<Button type='primary' onClick={handleCreate}>新建日志</Button>
 			</div>
@@ -138,16 +185,35 @@ const Journal = () => {
 				/>
 			</div>
 			<div className="journal-pagination">
-				<Pagination 
-					{...pageInfo} 
-					onChange={handlePageChange} 
-					showTotal={ total => `共${total}条`}
+				<Pagination
+					{...pageInfo}
+					onChange={handlePageChange}
+					showTotal={total => `共${total}条`}
 					showSizeChanger={true}
 					pageSizeOptions={[10, 20, 30, 40, 50]}
 				/>
 			</div>
+			{
+				modalVisible && <Modal open={modalVisible} title={modalTitleMap[operateType]} footer={null} maskClosable={false} onCancel={closeModal}>
+					<Form form={form} onFinish={handleModalFinish}>
+						<Row>
+							<Col span={24}>
+								<FormItem name='contentModal'>
+									<TextArea autoSize={{ minRows: 6 }} maxLength={500} showCount={true} placeholder='请输入内容...' />
+								</FormItem>
+							</Col>
+						</Row>
+						<Row justify='center'>
+							<Space>
+								<Button type='primary' htmlType='submit'>保存</Button>
+								<Button onClick={closeModal}>取消</Button>
+							</Space>
+						</Row>
+					</Form>
+				</Modal>
+			}
 		</div>
 	)
 }
 
-export default Journal;
+export default JournalManage;

@@ -1,0 +1,16 @@
+.artical {
+
+    .artical-form {}
+
+    .artical-operatebar {
+        display: flex;
+        margin-bottom: 10px;
+        flex-direction: row-reverse;
+    }
+
+    .artical-pagination {
+        display: flex;
+        margin-top: 10px;
+        flex-direction: row-reverse;
+    }
+}

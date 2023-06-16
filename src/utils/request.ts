@@ -3,17 +3,45 @@
  */
 
 import axios from 'axios';
+import type { AxiosInstance, AxiosResponse } from 'axios'
 
-axios.interceptors.request.use(function (config) {
-    return Promise.resolve(config)
-}, function (error) {
-    return Promise.reject(error)
-})
+class Request {
+	private instance: AxiosInstance;
 
-axios.interceptors.response.use(function (response) {
-    return Promise.resolve(response)
-}, function (error) {
-    return Promise.reject(error)
-})
+	constructor() {
+		// 创建实例
+		this.instance = axios.create({
+			baseURL: '/bms',
+			timeout: 5000
+		})
 
-export { axios }
+		// 设置请求拦截
+		this.instance.interceptors.request.use(config => {
+			return Promise.resolve(config)
+		}, error => {
+			console.log(error);
+			return Promise.reject(error)
+		})
+
+		// 设置响应拦截
+		this.instance.interceptors.response.use(response => {
+			const { status, data } = response;
+			return Promise.resolve({ status, data } as AxiosResponse)
+		}, error => {
+			console.log(error);
+			return Promise.reject(error)
+		})
+	}
+
+	get(url: string, params: any) {
+		return this.instance.get(url, {
+			params
+		})
+	}
+
+	post(url: string, data: any) {
+		return this.instance.get(url, data)
+	}
+}
+
+export default new Request();

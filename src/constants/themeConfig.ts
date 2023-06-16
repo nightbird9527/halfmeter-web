@@ -1,22 +1,24 @@
 const themeConfig = {
     default: {
         antdToken: {
-            colorPrimary: '#00b96b'
+            // colorPrimary: '#00b96b'
+            colorPrimary: 'cyan'
         },
-        siderBarBgc: '#777',
+        siderBarBgc: '#888',
         headerBgc: '#999',
         footerBgc: '#999',
-        contentBgc: '#888',
-        contentContainerBgc: '#aaa'
+        contentBgc: '#777',
+        textColor: '#000'
     },
     // dark: {
     //     antdToken: {
-    //         colorPrimary: 'cyan'
+    //         colorPrimary: '#21BECD'
     //     },
-    //     siderBarBgc: '#222',
-    //     headerBgc: '#333',
-    //     footerBgc: '#333',
-    //     contentBgc: '#444'
+    //     siderBarBgc: '#666',
+    //     headerBgc: '#222',
+    //     footerBgc: '#222',
+    //     contentBgc: '#333',
+    //     textColor: '#fff'
     // },
     light: {
         antdToken: {
@@ -26,7 +28,7 @@ const themeConfig = {
         headerBgc: '#eee',
         footerBgc: '#eee',
         contentBgc: '#ddd',
-        contentContainerBgc: '#fff'
+        textColor: '#000'
     }
 }
 
