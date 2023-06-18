@@ -17,7 +17,7 @@ const Login: React.FC = () => {
       username: 'gufee',
       password: 123456
     }
-    request.get('/login', params).then(res => {
+    request.post('/login', params).then(res => {
       console.log(res);
     }).catch(error => {
       console.log(error);

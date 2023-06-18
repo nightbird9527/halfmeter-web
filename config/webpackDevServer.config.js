@@ -13,7 +13,7 @@ module.exports = function () {
         },
         historyApiFallback: true,
         proxy: {
-            '/bms': 'http://localhost:8080',
+            '/halfmeter-bms-web': 'http://localhost:8080',
         },
     }
 }

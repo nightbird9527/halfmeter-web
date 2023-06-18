@@ -11,7 +11,7 @@ class Request {
 	constructor() {
 		// 创建实例
 		this.instance = axios.create({
-			baseURL: '/bms',
+			baseURL: '/halfmeter-bms-web',
 			timeout: 5000
 		})
 
@@ -25,6 +25,7 @@ class Request {
 
 		// 设置响应拦截
 		this.instance.interceptors.response.use(response => {
+			console.log(response);
 			const { status, data } = response;
 			return Promise.resolve({ status, data } as AxiosResponse)
 		}, error => {
@@ -40,7 +41,7 @@ class Request {
 	}
 
 	post(url: string, data: any) {
-		return this.instance.get(url, data)
+		return this.instance.post(url, data)
 	}
 }
 
