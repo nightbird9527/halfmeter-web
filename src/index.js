@@ -1,7 +1,7 @@
 import React from 'react'
 import * as ReactDOM from 'react-dom/client'
 import * as ReactRouterDOM from 'react-router-dom'
-import App from './app'
+import MyApp from './myApp'
 import store from './redux'
 import { Provider } from 'react-redux'
 import './styles/index.scss'
@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
     <BrowserRouter>
         <Provider store={store}>
-            <App />
+            <MyApp />
         </Provider>
     </BrowserRouter>
 )

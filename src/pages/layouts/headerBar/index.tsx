@@ -3,7 +3,7 @@ import { Layout, Dropdown, Button, Radio, Space } from 'antd';
 import { DownOutlined, BulbFilled } from '@ant-design/icons';
 import { useAppDispatch } from 'src/redux/hooks';
 import { useNavigate } from "react-router-dom";
-import { changeTheme } from 'src/app/appSlice';
+import { changeTheme } from 'src/myApp/appSlice';
 import { themeConfig } from 'src/constants'
 
 const { Header } = Layout;
