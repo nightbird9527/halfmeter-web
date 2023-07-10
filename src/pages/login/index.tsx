@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Button, Input, Row, Col } from 'antd';
 import { LockFilled, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
-import { request } from 'utils';
+import { request, crypto, AxiosResponseData } from 'utils';
 import './index.scss';
 
 const FormItem = Form.Item;
@@ -12,13 +12,18 @@ const Login: React.FC = () => {
 
   // 登陆
   const onFinish = (values) => {
-    console.log(values);
+    const encryptedPassword = crypto.encryptSHA256(values.password);
     const params = {
-      username: 'gufee',
-      password: 123456
+      nameOrEmail: values.nameOrEmail,
+      password: encryptedPassword
     }
-    request.post('/login', params).then(res => {
-      console.log(res);
+    request.post('/login', params).then((res: AxiosResponseData) => {
+      console.log('status and data', res);
+      const {resCode} = res;
+      if (resCode === '0001') {
+        navigate('/')
+      }
+
     }).catch(error => {
       console.log(error);
     });
@@ -26,7 +31,12 @@ const Login: React.FC = () => {
 
   // 游客登陆
   const handleVisitorLogin = () => {
-    navigate('/')
+    // navigate('/')
+    request.post('/loginVisitor', {}).then(res => {
+      console.log(res);
+    }).catch(error => {
+      console.log(error);
+    });
   }
 
   return (
@@ -39,10 +49,10 @@ const Login: React.FC = () => {
           size='large'
         >
           <FormItem
-            name='username'
+            name='nameOrEmail'
             rules={[{ required: true, message: 'Please input your username!' }]}
           >
-            <Input prefix={<UserOutlined />} placeholder='用户名' />
+            <Input prefix={<UserOutlined />} placeholder='用户名/邮箱' />
           </FormItem>
           <FormItem
             name='password'

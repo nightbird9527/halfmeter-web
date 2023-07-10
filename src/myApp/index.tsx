@@ -3,13 +3,13 @@ import * as ReactRouterDOM from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import { useAppSelector } from 'src/redux/hooks';
 import appRoutesConfig from 'src/routes';
-import {themeConfig} from 'src/constants';
+import { themeConfig } from 'src/constants';
 
 const { useRoutes } = ReactRouterDOM;
 
-const App = () => {
+const MyApp = () => {
 	const appConfig = useAppSelector(state => state.app);
-	const {antdToken} = themeConfig[appConfig.theme];
+	const { antdToken } = themeConfig[appConfig.theme];
 	return (
 		<ConfigProvider
 			theme={{
@@ -23,4 +23,4 @@ const App = () => {
 	)
 }
 
-export default App;
+export default MyApp;

@@ -4,6 +4,14 @@
 
 import axios from 'axios';
 import type { AxiosInstance, AxiosResponse } from 'axios'
+import { message, Modal } from 'antd';
+
+export interface AxiosResponseData extends AxiosResponse {
+	resData: any, 
+	resDesc: string, 
+	resCode: string, 
+	errno: number
+}
 
 class Request {
 	private instance: AxiosInstance;
@@ -25,11 +33,29 @@ class Request {
 
 		// 设置响应拦截
 		this.instance.interceptors.response.use(response => {
-			console.log(response);
-			const { status, data } = response;
-			return Promise.resolve({ status, data } as AxiosResponse)
+			const { resData, resDesc, resCode, errno } = response.data;
+			if (resDesc) {
+				if (errno === 0) {
+					message.success(resDesc);
+				}
+				if (errno === -1) {
+					if (resCode === '0000') {
+						Modal.error({
+							title: '错误',
+							content: resDesc,
+							onOk: () => {
+								if (resData && resData.noCookie) {
+									location.href = '/login';
+								}
+							}
+						})
+					} else {
+						message.error(resDesc)
+					}
+				}
+			}
+			return Promise.resolve(response.data)
 		}, error => {
-			console.log(error);
 			return Promise.reject(error)
 		})
 	}
