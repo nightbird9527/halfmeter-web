@@ -48,5 +48,8 @@
     "webpack-cli": "^5.1.1",
     "webpack-dev-server": "^4.15.0",
     "webpack-manifest-plugin": "^5.0.0"
+  },
+  "dependencies": {
+    "crypto-js": "^4.1.1"
   }
 }
