@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
 import Login from 'src/pages/login';
-import Layouts from 'src/pages/layouts';
+import Layout from 'src/pages/layout';
 import NotFound from 'src/pages/notFound';
 import menuRoutesConfig from './menuRoutes';
 
@@ -13,7 +13,7 @@ const getSubRoutes = (subRoutesConfig) => {
                 index: true,
                 element: <Navigate to={item.path} />,
             }
-            result.push(indexRouteItem)
+            result.push(indexRouteItem as never)
         }
         const routeItem = {
             path: item.path,
@@ -39,7 +39,7 @@ const appRoutesConfig: IAppRouteConfigItem[] = [
     },
     {
         path: '/',
-        element: <Layouts />,
+        element: <Layout />,
         children: getSubRoutes(menuRoutesConfig)
     },
     {

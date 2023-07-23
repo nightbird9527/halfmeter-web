@@ -31,12 +31,12 @@ const Login: React.FC = () => {
 
   // 游客登陆
   const handleVisitorLogin = () => {
-    // navigate('/')
-    request.post('/loginVisitor', {}).then(res => {
-      console.log(res);
-    }).catch(error => {
-      console.log(error);
-    });
+    navigate('/admin')
+    // request.post('/touristLogin', {}).then(res => {
+    //   console.log(res);
+    // }).catch(error => {
+    //   console.log(error);
+    // });
   }
 
   return (

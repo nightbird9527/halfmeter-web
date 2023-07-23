@@ -5,8 +5,6 @@ import { HomeOutlined } from '@ant-design/icons'
 import SiderBar from './siderBar';
 import HeaderBar from './headerBar';
 import FooterBar from './footerBar';
-import { themeConfig } from 'src/constants';
-import { useAppSelector } from 'src/redux/hooks';
 import menuRoutesConfig from 'src/routes/menuRoutes'
 import './index.scss'
 
@@ -26,9 +24,6 @@ const getBreadcurmbMap = (menuRoutesConfig, prePath = '') => {
 }
 
 const Layouts = () => {
-	const appConfig = useAppSelector(state => state.app);
-	const { siderBarBgc, headerBgc, footerBgc, contentBgc, textColor } = themeConfig[appConfig.theme];
-
 	const location = useLocation();
 	const pathSnippets = location.pathname.split('/').filter((i) => i);
 	const breadcrumbMap = getBreadcurmbMap(menuRoutesConfig);
@@ -44,16 +39,16 @@ const Layouts = () => {
 	const breadcrumbItems = [
 		{
 			key: 'home',
-			title: <Link to="/"><HomeOutlined /></Link>,
+			title: <Link to="/admin"><HomeOutlined /></Link>,
 		},
 	].concat(extraBreadcrumbItems);
 
 	return (
-		<Layout className='layout' >
-			<SiderBar backGroundColor={siderBarBgc} textColor={textColor} />
+		<Layout className='layout'>
+			<SiderBar />
 			<Layout>
-				<HeaderBar backGroundColor={headerBgc} />
-				<Content className='content' style={{ backgroundColor: contentBgc }}>
+				<HeaderBar />
+				<Content className='content'>
 					<div className="content-breadcrumb">
 						<Breadcrumb items={breadcrumbItems} />
 					</div>
@@ -61,7 +56,7 @@ const Layouts = () => {
 						<Outlet />
 					</div>
 				</Content>
-				<FooterBar backGroundColor={footerBgc} />
+				<FooterBar />
 			</Layout>
 		</Layout>
 	)
