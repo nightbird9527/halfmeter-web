@@ -12,13 +12,14 @@ import RoleManage from 'src/pages/authority/role';
 import ResourceManage from 'src/pages/authority/resource';
 import JournalManage from 'src/pages/journal';
 
-const { Routes, Route } = ReactRouterDOM;
+const { Routes, Route, Navigate  } = ReactRouterDOM;
 
 const App = () => {
     return (
         <ConfigProvider theme={{ token: { colorPrimary: 'cyan' } }}>
             <Routes>
-                <Route path='/login' element={<Login />}></Route>
+                <Route path='/' element={<Navigate to='/admin' />} />
+                <Route path='/login' element={<Login />} />
                 <Route path='/admin' element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path='home' index element={<Home />} />
@@ -31,7 +32,7 @@ const App = () => {
                     </Route>
                     <Route path="journal" element={<JournalManage />} />
                 </Route>
-                <Route path='*' element={<NotFound />}></Route>
+                <Route path='*' element={<NotFound />} />
             </Routes>
         </ConfigProvider>
     )

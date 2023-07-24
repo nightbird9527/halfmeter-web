@@ -5,13 +5,13 @@ import { HomeOutlined } from '@ant-design/icons'
 import SiderBar from './siderBar';
 import HeaderBar from './headerBar';
 import FooterBar from './footerBar';
-import menuRoutesConfig from 'src/routes/menuRoutes'
+import {menuRoutesConfig} from 'src/routes'
 import './index.scss'
 
 const { Outlet, useLocation, Link } = ReactRouterDOM;
 const { Content } = Layout;
 
-const getBreadcurmbMap = (menuRoutesConfig, prePath = '') => {
+const getBreadcurmbMap = (menuRoutesConfig, prePath = '/admin') => {
 	let result = {};
 	menuRoutesConfig.forEach(item => {
 		const currentUrl = `${prePath}/${item.path}`;

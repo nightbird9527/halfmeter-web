@@ -1,21 +1,27 @@
 import React from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import menuRoutesConfig from 'src/routes/menuRoutes';
+import {menuRoutesConfig} from 'src/routes';
 
 const { Sider } = Layout;
 const { Link } = ReactRouterDOM;
+interface IMenuItem {
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: IMenuItem[],
+    type?: 'group',
+}
 
 const getMenuItems = (routesConfigList, prePath) => {
-    const result = [];
+    const result: IMenuItem[] = [];
     routesConfigList.forEach(item => {
         const currentPath = prePath ? `${prePath}/${item.path}` : item.path;
-        const menuItem = {
+        const menuItem: IMenuItem = {
             label: <Link to={currentPath}>{item.label}</Link>,
             key: item.path,
             icon: item.icon,
-            children: undefined
-        }
+        };
         if (item.children) {
             menuItem.label = item.label;
             menuItem.children = getMenuItems(item.children, currentPath)
@@ -33,7 +39,7 @@ const SiderBar = (props) => {
             </div>
             <Menu
                 mode='inline'
-                items={getMenuItems(menuRoutesConfig, null)}
+                items={getMenuItems(menuRoutesConfig, '/admin')}
                 theme='light'
             />
         </Sider>
