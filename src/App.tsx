@@ -21,11 +21,12 @@ const App = () => {
                 <Route path='/' element={<Navigate to='/admin' />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/admin' element={<Layout />}>
-                    <Route index element={<Home />} />
+                    <Route index element={<Navigate to='home' />} />
                     <Route path='home' index element={<Home />} />
                     <Route path="tag" element={<TagManage />} />
                     <Route path="artical" element={<ArticalManage />} />
                     <Route path="authority">
+                        <Route index element={<Navigate to='user' />} />
                         <Route path="user" element={<UserManage />} />
                         <Route path="role" element={<RoleManage />} />
                         <Route path="resource" element={<ResourceManage />} />

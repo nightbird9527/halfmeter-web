@@ -18,7 +18,7 @@ import RoleManage from 'src/pages/authority/role';
 import ResourceManage from 'src/pages/authority/resource';
 import JournalManage from 'src/pages/journal';
 
-interface IMenuRouteConfigItem {
+export interface IMenuRouteConfigItem {
     label: string,
     path: string,
     element?: React.ReactNode,
