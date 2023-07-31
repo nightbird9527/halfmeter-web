@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Table, Space, Button, Form, Input, Row, Col, Divider, Pagination, Tag } from 'antd';
+import { Space, Button, Form, Input, Row, Col, Divider, Pagination, Tag, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { MaxTable } from 'src/components'
+import {reqCreateTag, reqUpdateTag} from 'src/services'
 import './index.scss'
 
 const FormItem = Form.Item;
@@ -23,6 +25,8 @@ const TagManage = () => {
 	const [dataSource, setDataSource] = useState([]);
 	const [recordData, setRecordData] = useState({});
 	const [loading, setLoading] = useState(false);
+	const [modalVisible, setModalVisible] = useState(false)
+	const [modalType, setModalType] = useState('create')
 	const [pageInfo, setPageInfo] = useState({
 		current: 1,
 		pageSize: 10,
@@ -107,13 +111,35 @@ const TagManage = () => {
 	}
 
 	// 新建
-	const handleCreate = (record) => {
-		console.log(record);
+	const handleCreate = () => {
+		setModalType('create')
+		setModalVisible(true)
+		
 	}
 
 	// 编辑
 	const handleUpdate = (record) => {
 		console.log(record);
+		setModalType('update')
+		setModalVisible(true)
+	}
+
+	// Modal保存
+	const handleModalSave = () => {
+		const fieldNames = ['title_modal', 'color_modal', 'status_modal']
+		form.validateFields(fieldNames).then(values => {
+			console.log('values', values);
+			const input = {
+				title: 'hhh',
+				age: '10'
+			}
+			reqCreateTag(input)
+		})
+	}
+
+	// 关闭Modal
+	const closeModal = () => {
+		setModalVisible(false)
 	}
 
 	// 删除
@@ -133,6 +159,14 @@ const TagManage = () => {
 	const handlePageChange = (page, pageSize) => {
 		console.log(page, pageSize);
 	}
+
+	const tableBar = (
+		<div className='tag-table-bar'>
+			<div className='tag-table-bar-container'>
+				<Button type='primary' onClick={handleCreate}>新建标签</Button>
+			</div>
+		</div>
+	)
 
 	return (
 		<div className='tag'>
@@ -160,11 +194,9 @@ const TagManage = () => {
 				</Form>
 			</div>
 			<Divider orientation='center'>💙💙💙</Divider>
-			<div className="tag-operatebar">
-				<Button type='primary' onClick={handleCreate}>新建标签</Button>
-			</div>
 			<div className="tag-table">
-				<Table
+				<MaxTable
+					bar={tableBar}
 					bordered
 					columns={columns}
 					dataSource={dataSource}
@@ -183,6 +215,25 @@ const TagManage = () => {
 					pageSizeOptions={[10, 20, 30, 40, 50]}
 				/>
 			</div>
+			{
+				modalVisible && (
+					<Modal open={modalVisible} title={modalType === 'create' ? '新建标签' : '编辑标签'} onCancel={closeModal} footer={null}>
+						<Form form={form}>
+							<Row>
+								<Col span={24}>
+									<FormItem name='title_modal'><Input placeholder='标题' /></FormItem>
+									<FormItem name='color_modal'><Input placeholder='颜色' /></FormItem>
+									<FormItem name='status_modal'><Input placeholder='状态' /></FormItem>
+								</Col> 
+							</Row>
+							<Row>
+								<Button type='primary' onClick={handleModalSave}>保存</Button>
+								<Button onClick={closeModal}>取消</Button>
+							</Row>
+						</Form>
+					</Modal>
+				)
+			}
 		</div>
 	)
 }

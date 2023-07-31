@@ -4,13 +4,12 @@
 
 import axios from 'axios';
 import type { AxiosInstance, AxiosResponse } from 'axios'
-import { message, Modal } from 'antd';
+import {Modal} from 'antd'
 
 export interface AxiosResponseData extends AxiosResponse {
 	resData: any, 
 	resDesc: string, 
 	resCode: string, 
-	errno: number
 }
 
 class Request {
@@ -19,7 +18,7 @@ class Request {
 	constructor() {
 		// 创建实例
 		this.instance = axios.create({
-			baseURL: '/halfmeter-bms-web',
+			baseURL: '/halfmeter-admin',
 			timeout: 5000
 		})
 
@@ -27,32 +26,22 @@ class Request {
 		this.instance.interceptors.request.use(config => {
 			return Promise.resolve(config)
 		}, error => {
-			console.log(error);
 			return Promise.reject(error)
 		})
 
 		// 设置响应拦截
 		this.instance.interceptors.response.use(response => {
-			const { resData, resDesc, resCode, errno } = response.data;
-			if (resDesc) {
-				if (errno === 0) {
-					message.success(resDesc);
-				}
-				if (errno === -1) {
-					if (resCode === '0000') {
-						Modal.error({
-							title: '错误',
-							content: resDesc,
-							onOk: () => {
-								if (resData && resData.noCookie) {
-									location.href = '/login';
-								}
-							}
-						})
-					} else {
-						message.error(resDesc)
+			const { resData, resDesc, resCode } = response.data;
+			if (resCode === '00') {
+				Modal.error({
+					title: '错误',
+					content: resDesc,
+					onOk: () => {
+						if (resData && resData.noCookie) {
+							location.href = '/login';
+						}
 					}
-				}
+				})
 			}
 			return Promise.resolve(response.data)
 		}, error => {

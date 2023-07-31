@@ -48,6 +48,7 @@
     "webpack-manifest-plugin": "^5.0.0"
   },
   "dependencies": {
-    "crypto-js": "^4.1.1"
+    "crypto-js": "^4.1.1",
+    "zustand": "^4.3.9"
   }
 }

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Layout, Dropdown, Button, Radio, Space } from 'antd';
 import { DownOutlined, BulbFilled } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
-import { changeTheme } from 'src/myApp/appSlice';
 import { themeConfig } from 'src/constants'
 
 const { Header } = Layout;

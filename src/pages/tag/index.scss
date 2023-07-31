@@ -2,10 +2,12 @@
 
     .tag-form {}
 
-    .tag-operatebar {
-        display: flex;
-        margin-bottom: 10px;
-        flex-direction: row-reverse;
+    .tag-table {
+        .tag-table-bar {
+            display: flex;
+            flex-direction: row-reverse;
+            margin-bottom: 10px;
+        }
     }
 
     .tag-pagination {

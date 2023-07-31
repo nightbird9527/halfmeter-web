@@ -2,31 +2,43 @@ import React from 'react';
 import { Form, Button, Input, Row, Col } from 'antd';
 import { LockFilled, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
-import { request, crypto, AxiosResponseData } from 'utils';
+import { crypto, AxiosResponseData } from 'utils';
+import { reqUserLogin, reqTouristLogin } from 'src/services'
+import useStaticFuncStore from 'src/store'
 import './index.scss';
 
 const FormItem = Form.Item;
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const message = useStaticFuncStore((state: any) => state.message);
 
   // 登陆
   const onFinish = (values) => {
+    console.log(message);
+    
     const encryptedPassword = crypto.encryptSHA256(values.password);
     const params = {
       nameOrEmail: values.nameOrEmail,
       password: encryptedPassword
     }
-    request.post('/login', params).then((res: AxiosResponseData) => {
-      console.log('status and data', res);
-      const {resCode} = res;
-      if (resCode === '0001') {
-        navigate('/')
-      }
+    reqUserLogin(params).then((res: AxiosResponseData) => {
+      console.log(res);
+      const {resDesc} = res;
+      message.success(resDesc)
+      navigate('/')
+    })
+    // request.post('/login', params).then((res: AxiosResponseData) => {
+    //   console.log('status and data', res);
+      
+    //   const {resCode} = res;
+    //   if (resCode === '0001') {
+        
+    //   }
 
-    }).catch(error => {
-      console.log(error);
-    });
+    // }).catch(error => {
+    //   console.log(error);
+    // });
   }
 
   // 游客登陆
