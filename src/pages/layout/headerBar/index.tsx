@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
-import { Layout, Dropdown, Button, Radio, Space } from 'antd';
+import React from 'react';
+import { Layout, Dropdown, Button } from 'antd';
 import { DownOutlined, BulbFilled } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
-import { themeConfig } from 'src/constants'
+import { USER_INFO, themeConfig } from 'src/constants'
+import {localStore} from 'src/utils'
 
 const { Header } = Layout;
 
-const HeaderBar = (props) => {
+const HeaderBar = () => {
 	const navigate = useNavigate();
+	const userInfo = localStore.get(USER_INFO);
 
 	// 切换主题
-	const handleThemeChange = (theme) => {
+	const handleThemeChange = (item) => {
+		console.log(item);
 	}
 
 	// 退出登陆
 	const handleQuit = () => {
+		localStore.remove(USER_INFO)
 		navigate('/login')
 	}
 
@@ -40,7 +44,7 @@ const HeaderBar = (props) => {
 				<Dropdown menu={{ items: themeMenuItems }} placement="bottomLeft"><Button type='text'><BulbFilled />Theme</Button></Dropdown>
 			</div>
 			<div className="header-user">
-				<Dropdown menu={{ items: userMenuItems }} placement="bottomRight"><Button type='link' size='large'>admin<DownOutlined /></Button></Dropdown>
+				<Dropdown menu={{ items: userMenuItems }} placement="bottomRight"><Button type='link' size='large'>{userInfo.user_name}<DownOutlined /></Button></Dropdown>
 			</div>
 			<div className="header-weather">
 				晴

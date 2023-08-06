@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
-import { ConfigProvider, App } from 'antd';
-import useStaticFuncStore from 'src/store';
+import { ConfigProvider } from 'antd';
 import Login from 'src/pages/login';
 import Layout from 'src/pages/layout';
 import NotFound from 'src/pages/notFound';
@@ -13,23 +12,9 @@ import RoleManage from 'src/pages/authority/role';
 import ResourceManage from 'src/pages/authority/resource';
 import JournalManage from 'src/pages/journal';
 
-import type { MessageInstance } from 'antd/es/message/interface';
-import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
-import type { NotificationInstance } from 'antd/es/notification/interface';
-let message: MessageInstance;
-let notification: NotificationInstance;
-let modal: Omit<ModalStaticFunctions, 'warn'>;
-
 const { Routes, Route, Navigate  } = ReactRouterDOM;
 
 const MyApp = () => {
-    const {message, modal, notification} = App.useApp();
-    const initial = useStaticFuncStore((state: any) => state.initial)
-
-    useEffect(() => {
-        initial(message, modal, notification)
-    }, [])
-
     return (
         <ConfigProvider theme={{ token: { colorPrimary: 'cyan' } }}>
             <Routes>
@@ -55,4 +40,3 @@ const MyApp = () => {
 }
 
 export default MyApp;
-export { message, notification, modal };

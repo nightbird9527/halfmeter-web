@@ -2,14 +2,15 @@
  * @description 基于axios封装的http请求模块
  */
 
-import axios from 'axios';
-import type { AxiosInstance, AxiosResponse } from 'axios'
+import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import {Modal} from 'antd'
+import { USER_INFO } from 'src/constants'
+import {localStore} from 'src/utils'
 
 export interface AxiosResponseData extends AxiosResponse {
-	resData: any, 
-	resDesc: string, 
-	resCode: string, 
+	data: any, 
+	desc: string, 
+	code: string, 
 }
 
 class Request {
@@ -31,15 +32,14 @@ class Request {
 
 		// 设置响应拦截
 		this.instance.interceptors.response.use(response => {
-			const { resData, resDesc, resCode } = response.data;
-			if (resCode === '00') {
+			const { desc, code } = response.data;
+			if (code === '00') {
 				Modal.error({
 					title: '错误',
-					content: resDesc,
+					content: desc,
 					onOk: () => {
-						if (resData && resData.noCookie) {
-							location.href = '/login';
-						}
+						localStore.remove(USER_INFO)
+						location.href = '/login';
 					}
 				})
 			}
