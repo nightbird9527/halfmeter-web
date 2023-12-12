@@ -1,34 +1,63 @@
-const themeConfig = {
-    default: {
-        antdToken: {
-            // colorPrimary: '#00b96b'
-            colorPrimary: 'cyan'
+import {theme} from 'antd';
+import {IThemeConfig, ITheme} from './interface'
+
+const {darkAlgorithm} = theme;
+
+const themeConfig: IThemeConfig<ITheme> = {
+    dark: {
+        antdTheme: {
+            token: {
+                colorPrimary: '#F8AC75',
+                colorPrimaryBg: '#F8AC75'
+            },
+            algorithm: darkAlgorithm,
         },
-        siderBarBgc: '#888',
-        headerBgc: '#999',
-        footerBgc: '#999',
-        contentBgc: '#777',
-        textColor: '#000'
+        headerStyle: {
+            headerBgColor: '#242525',
+            headerTextColor: '#ffffff',
+            headerBorderColor: '#333333',
+        },
+        siderStyle: {
+            siderBgColor: '#242525',
+            siderTextColor: '#ffffff',
+            siderBorderColor: '#333333',
+        },
+        contentStyle: {
+            contentBgColor: '#242525',
+            contentTextColor: '#ffffff',
+        },
+        footerStyle: {
+            footerBgColor: '#242525',
+            footerTextColor: '#ffffff',
+            footerBorderColor: '#333333'
+        },
     },
-    // dark: {
-    //     antdToken: {
-    //         colorPrimary: '#21BECD'
-    //     },
-    //     siderBarBgc: '#666',
-    //     headerBgc: '#222',
-    //     footerBgc: '#222',
-    //     contentBgc: '#333',
-    //     textColor: '#fff'
-    // },
     light: {
-        antdToken: {
-            colorPrimary: '#333'
+        antdTheme: {
+            token: {
+                colorPrimary: '#5FE5F5',
+                colorPrimaryBg: '#5FE5F5'
+            },
         },
-        siderBarBgc: '#fff',
-        headerBgc: '#eee',
-        footerBgc: '#eee',
-        contentBgc: '#ddd',
-        textColor: '#000'
+        headerStyle: {
+            headerBgColor: '#ffffff',
+            headerTextColor: '#000000',
+            headerBorderColor: '#dddddd',
+        },
+        siderStyle: {
+            siderBgColor: '#ffffff',
+            siderTextColor: '#000000',
+            siderBorderColor: '#dddddd',
+        },
+        contentStyle: {
+            contentBgColor: '#ffffff',
+            contentTextColor: '#000000',
+        },
+        footerStyle: {
+            footerBgColor: '#ffffff',
+            footerTextColor: '#000000',
+            footerBorderColor: '#dddddd'
+        },
     }
 }
 

@@ -1,39 +1,36 @@
-import React, { useState } from 'react';
-import { Space, Button, Form, Input, Row, Col, Divider, Pagination, Tag, Modal } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import { MaxTable } from 'src/components'
-import {reqCreateTag, reqUpdateTag} from 'src/services'
+import React, { useState, useEffect } from 'react';
+import { Space, Button, Form, Input, Row, Col, Divider, Pagination, Tag, Modal, ColorPicker, Table, theme, App, Select, DatePicker } from 'antd';
+import type { Color } from 'antd/es/color-picker';
+import { reqFetchTagList, reqCreateTag, reqUpdateTag, reqDeleteTag } from 'src/services'
+import { AxiosResponseData } from 'utils'
+import dayjs from 'dayjs'
 import './index.scss'
 
 const FormItem = Form.Item;
-interface ITagDataItem {
-	id: string,
-	title: string,
-	color: string,
-	tag: string,
-	status: string,
-	articalCount: string,
-	createTime: string,
-	createUser: string,
-	updateTime: string,
-	updateUser: string,
+const { Option } = Select
+const { RangePicker } = DatePicker
+const statusMap = {
+	'0': '无效',
+	'1': '有效',
 }
 
 const TagManage = () => {
 	const [form] = Form.useForm()
-	const [selectedKeys, setSelectedKeys] = useState([]);
+	const { modal, message } = App.useApp()
+	const { token } = theme.useToken();
+	const [queryParams, setQueryParams] = useState({})
 	const [dataSource, setDataSource] = useState([]);
-	const [recordData, setRecordData] = useState({});
-	const [loading, setLoading] = useState(false);
-	const [modalVisible, setModalVisible] = useState(false)
-	const [modalType, setModalType] = useState('create')
+	const [recordData, setRecordData] = useState({} as any);
+	const [tagColor, setTagColor] = useState<Color | string>(token.colorPrimary)
+	const [tableLoading, setTableLoading] = useState(false);
+	const [modalVisible, setModalVisible] = useState(false);
+	const [operateType, setOperateType] = useState('create')
 	const [pageInfo, setPageInfo] = useState({
 		current: 1,
 		pageSize: 10,
 		total: 0,
 	});
-
-	const columns: ColumnsType<ITagDataItem> = [
+	const columns: any = [
 		{
 			title: 'ID',
 			dataIndex: 'id',
@@ -53,7 +50,7 @@ const TagManage = () => {
 			title: '标签',
 			dataIndex: 'tag',
 			align: 'center',
-			render: (...args) => {
+			render: (...args: any) => {
 				return <Tag color={args[1].color}>{args[1].title}</Tag>
 			}
 		},
@@ -61,10 +58,17 @@ const TagManage = () => {
 			title: '状态',
 			dataIndex: 'status',
 			align: 'center',
+			render: (text: any) => {
+				let renderText = '';
+				if (text && statusMap[text]) {
+					renderText = statusMap[text]
+				}
+				return renderText
+			}
 		},
 		{
 			title: '文章数量',
-			dataIndex: 'articalCount',
+			dataIndex: 'articalNum',
 			align: 'center',
 		},
 		{
@@ -100,9 +104,48 @@ const TagManage = () => {
 		}
 	];
 
+	// 标签列表查询接口请求函数
+	const fetchTagList = (payload: any) => {
+		setTableLoading(true)
+		const { values, current, pageSize } = payload;
+		const input = {
+			title: values.title,
+			status: values.status,
+			startDate: values.startDate,
+			endDate: values.endDate,
+			pageNo: current,
+			pageSize
+		}
+		reqFetchTagList(input).then((res) => {
+			const { total, dataList } = res.resOutput.data;
+			setQueryParams({ ...values })
+			setPageInfo({ current, pageSize, total })
+			setDataSource(dataList || [])
+		}).catch(error => {
+			modal.error({
+				title: error.title,
+				content: error.message
+			})
+		}).finally(() => {
+			setTableLoading(false)
+		});
+	}
+
 	// 查询
-	const handleSubmit = (values) => {
-		console.log(values);
+	const handleSubmit = () => {
+		form.validateFields(['title', 'status', 'date']).then(values => {
+			if (values.date && values.date.length) {
+				values.startDate = dayjs(values.date[0]).format('YYYYMMDD');
+				values.endDate = dayjs(values.date[1]).format('YYYYMMDD');
+				delete values.date
+			}
+			const payload = {
+				values,
+				current: 1,
+				pageSize: 10
+			};
+			fetchTagList(payload)
+		})
 	}
 
 	// 重置
@@ -110,30 +153,141 @@ const TagManage = () => {
 		form.resetFields();
 	}
 
+	// 翻页
+	const handlePageChange = (page, pageSize) => {
+		let current = page;
+		if (pageSize !== pageInfo.pageSize) {
+			current = 1;
+		}
+		const payload = {
+			values: { ...queryParams },
+			current,
+			pageSize
+		}
+		fetchTagList(payload)
+	}
+
 	// 新建
 	const handleCreate = () => {
-		setModalType('create')
+		setOperateType('create')
 		setModalVisible(true)
-		
 	}
 
 	// 编辑
-	const handleUpdate = (record) => {
-		console.log(record);
-		setModalType('update')
+	const handleUpdate = (record: any) => {
+		setRecordData(record)
+		setOperateType('update')
+		setTagColor(record.color)
 		setModalVisible(true)
+	}
+
+	useEffect(() => {
+		if (modalVisible) {
+			if (operateType === 'create') {
+				form.setFieldsValue({
+					'title_modal': '',
+					'status_modal': '',
+					'color_modal': ''
+				})
+			}
+			if (operateType === 'update') {
+				form.setFieldsValue({
+					'title_modal': recordData.title,
+					'status_modal': recordData.status,
+					'color_modal': tagColor
+				});
+			}
+		} else {
+			form.resetFields(['title_modal', 'status_modal', 'color_modal'])
+			setTagColor(token.colorPrimary)
+		}
+	}, [modalVisible])
+
+	// 删除
+	const handleDelete = (record: any) => {
+		modal.confirm({
+			title: '提示',
+			content: '确认要删除该标签吗？',
+			onOk: () => {
+				const payload = {
+					id: record.id
+				}
+				reqDeleteTag(payload).then((res: AxiosResponseData) => {
+					const { resOutput } = res;
+					message.success(resOutput.msg)
+					const queryPayload = {
+						values: { ...queryParams },
+						current: pageInfo.current,
+						pageSize: pageInfo.pageSize
+					}
+					fetchTagList(queryPayload)
+				}).catch(error => {
+					modal.error({
+						title: error.title,
+						content: error.message
+					})
+				})
+			}
+		})
+	}
+
+	// 颜色选择器Change
+	const handleColorModalChange = (color: Color) => {
+		setTagColor(color.toHexString())
+		form.setFieldsValue({ 'color_modal': color.toHexString() })
 	}
 
 	// Modal保存
 	const handleModalSave = () => {
-		const fieldNames = ['title_modal', 'color_modal', 'status_modal']
+		const fieldNames = ['title_modal', 'status_modal']
 		form.validateFields(fieldNames).then(values => {
-			console.log('values', values);
-			const input = {
-				title: 'hhh',
-				age: '10'
+			if (operateType === 'create') {
+				const payload = {
+					title: values.title_modal,
+					status: values.status_modal,
+					color: tagColor
+				}
+				reqCreateTag(payload).then((res: AxiosResponseData) => {
+					const { resOutput } = res;
+					message.success(resOutput.msg)
+					closeModal()
+					const queryPayload = {
+						values: { ...queryParams },
+						current: pageInfo.current,
+						pageSize: pageInfo.pageSize
+					}
+					fetchTagList(queryPayload)
+				}).catch(error => {
+					modal.error({
+						title: error.title,
+						content: error.message
+					})
+				})
 			}
-			reqCreateTag(input)
+			if (operateType === 'update') {
+				const payload = {
+					id: recordData.id,
+					title: values.title_modal,
+					status: values.status_modal,
+					color: tagColor
+				}
+				reqUpdateTag(payload).then((res: AxiosResponseData) => {
+					const { resOutput } = res;
+					message.success(resOutput.msg)
+					closeModal()
+					const queryPayload = {
+						values: { ...queryParams },
+						current: pageInfo.current,
+						pageSize: pageInfo.pageSize
+					}
+					fetchTagList(queryPayload)
+				}).catch(error => {
+					modal.error({
+						title: error.title,
+						content: error.message
+					})
+				})
+			}
 		})
 	}
 
@@ -142,31 +296,10 @@ const TagManage = () => {
 		setModalVisible(false)
 	}
 
-	// 删除
-	const handleDelete = (record) => {
-		console.log(record);
-	}
-
-	// Table-rowSelection
-	const rowSelection = {
-		selectedRowKeys: selectedKeys,
-		onChange: (selectedKeys) => {
-			setSelectedKeys(selectedKeys);
-		}
-	}
-
-	// Pagination-onChange
-	const handlePageChange = (page, pageSize) => {
-		console.log(page, pageSize);
-	}
-
-	const tableBar = (
-		<div className='tag-table-bar'>
-			<div className='tag-table-bar-container'>
-				<Button type='primary' onClick={handleCreate}>新建标签</Button>
-			</div>
-		</div>
-	)
+	// 标签状态Opts
+	const statusOpts = Object.keys(statusMap).map(item => {
+		return <Option key={item} value={item}>{statusMap[item]}</Option>
+	})
 
 	return (
 		<div className='tag'>
@@ -177,10 +310,10 @@ const TagManage = () => {
 							<FormItem name='title'><Input placeholder='标题' /></FormItem>
 						</Col>
 						<Col span={8}>
-							<FormItem name='status'><Input placeholder='状态' /></FormItem>
+							<FormItem name='status'><Select placeholder='状态'>{statusOpts}</Select></FormItem>
 						</Col>
 						<Col span={8}>
-							<FormItem name='date'><Input placeholder='日期' /></FormItem>
+							<FormItem name='date'><RangePicker placeholder={['开始日期', '结束日期']} style={{ width: '100%' }} /></FormItem>
 						</Col>
 					</Row>
 					<Row>
@@ -194,16 +327,17 @@ const TagManage = () => {
 				</Form>
 			</div>
 			<Divider orientation='center'>💙💙💙</Divider>
+			<div className="tag-tablebar">
+				<Button type='primary' onClick={handleCreate}>新建标签</Button>
+			</div>
 			<div className="tag-table">
-				<MaxTable
-					bar={tableBar}
+				<Table
 					bordered
 					columns={columns}
 					dataSource={dataSource}
-					rowKey={record => record.id}
-					rowSelection={rowSelection}
+					rowKey={(record: any) => record.id}
 					pagination={false}
-					loading={loading}
+					loading={tableLoading}
 				/>
 			</div>
 			<div className="tag-pagination">
@@ -217,20 +351,24 @@ const TagManage = () => {
 			</div>
 			{
 				modalVisible && (
-					<Modal open={modalVisible} title={modalType === 'create' ? '新建标签' : '编辑标签'} onCancel={closeModal} footer={null}>
-						<Form form={form}>
-							<Row>
-								<Col span={24}>
-									<FormItem name='title_modal'><Input placeholder='标题' /></FormItem>
-									<FormItem name='color_modal'><Input placeholder='颜色' /></FormItem>
-									<FormItem name='status_modal'><Input placeholder='状态' /></FormItem>
-								</Col> 
-							</Row>
-							<Row>
-								<Button type='primary' onClick={handleModalSave}>保存</Button>
-								<Button onClick={closeModal}>取消</Button>
-							</Row>
-						</Form>
+					<Modal open={modalVisible} title={operateType === 'create' ? '新建标签' : '编辑标签'} onCancel={closeModal} footer={null}>
+						<div style={{ padding: '20px' }}>
+							<Form form={form}>
+								<Row>
+									<Col span={24}>
+										<FormItem name='title_modal' label='标题'><Input /></FormItem>
+										<FormItem name='status_modal' label='状态'><Select>{statusOpts}</Select></FormItem>
+										<FormItem name='color_modal' label='颜色'><ColorPicker showText trigger='hover' value={tagColor} onChange={handleColorModalChange} /></FormItem>
+									</Col>
+								</Row>
+								<Row justify='center'>
+									<Space>
+										<Button type='primary' onClick={handleModalSave}>保存</Button>
+										<Button onClick={closeModal}>取消</Button>
+									</Space>
+								</Row>
+							</Form>
+						</div>
 					</Modal>
 				)
 			}

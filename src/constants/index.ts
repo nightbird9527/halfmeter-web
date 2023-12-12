@@ -1,5 +1,8 @@
-import themeConfig from './themeConfig'
+export { default as themeConfig } from './themeConfig'
+export type {IThemeConfig, ITheme, ThemeFlagType} from './interface'
 
-const USER_INFO: string = 'user_info';
+const USER_INFO: string = 'user_info'; // 用户信息
 
-export {USER_INFO, themeConfig}
+export default {
+    USER_INFO
+}

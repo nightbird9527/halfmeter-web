@@ -4,13 +4,18 @@
 
 import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import {Modal} from 'antd'
-import { USER_INFO } from 'src/constants'
+import contants from 'src/constants'
 import {localStore} from 'src/utils'
 
+const {USER_INFO} = contants;
+
 export interface AxiosResponseData extends AxiosResponse {
-	data: any, 
-	desc: string, 
-	code: string, 
+	resOutput: {
+		data: any,
+		msg: string
+	},
+	opeResult: 'success' | 'error',
+	tokenExpired?: boolean
 }
 
 class Request {
@@ -25,6 +30,11 @@ class Request {
 
 		// 设置请求拦截
 		this.instance.interceptors.request.use(config => {
+			const userInfo = localStore.get(USER_INFO)
+			config.data = {
+				reqInput: config.data,
+				reqUserInfo: JSON.stringify(userInfo)
+			}
 			return Promise.resolve(config)
 		}, error => {
 			return Promise.reject(error)
@@ -32,31 +42,47 @@ class Request {
 
 		// 设置响应拦截
 		this.instance.interceptors.response.use(response => {
-			const { desc, code } = response.data;
-			if (code === '00') {
-				Modal.error({
-					title: '错误',
-					content: desc,
-					onOk: () => {
-						localStore.remove(USER_INFO)
-						location.href = '/login';
-					}
-				})
-			}
-			return Promise.resolve(response.data)
+			const { resOutput, opeResult, tokenExpired } = response.data;
+			return new Promise((resolve, reject) => {
+				if (tokenExpired) {
+					return Modal.error({
+						title: '错误',
+						content: resOutput.msg,
+						onOk: () => {
+							localStore.remove(USER_INFO)
+							location.href = '/login';
+						}
+					})
+				}
+				if (opeResult === 'error') {
+					reject({title: 'Error', message: resOutput.msg})
+				}
+				resolve(response)
+			})
 		}, error => {
-			return Promise.reject(error)
+			const {message, response: {statusText}} = error
+			return Promise.reject({title: statusText, message});
 		})
 	}
 
 	get(url: string, params: any) {
-		return this.instance.get(url, {
-			params
+		return new Promise<any>((resolve, reject) => {
+			this.instance.post(url, params).then(res => {
+				resolve(res.data)
+			}).catch(error => {
+				reject(error)
+			})
 		})
 	}
 
-	post(url: string, data: any) {
-		return this.instance.post(url, data)
+	post(url: string, params: any) {
+		return new Promise<any>((resolve, reject) => {
+			this.instance.post(url, params).then(res => {
+				resolve(res.data)
+			}).catch(error => {
+				reject(error)
+			})
+		})
 	}
 }
 

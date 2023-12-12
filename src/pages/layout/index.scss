@@ -1,39 +1,10 @@
 .layout {
-    min-height: 800px;
     height: 100%;
-
-    .sider {
-        color: #fff;
-
-        .sider-logo {
-            text-align: center;
-        }
-    }
-
-    .header {
-        padding: 0 15px;
-
-        .header-theme {
-            float: left;
-
-            button {
-                padding: 0;
-            }
-        }
-
-        .header-weather {
-            float: right;
-            margin-right: 20px;
-        }
-
-        .header-user {
-            float: right;
-        }
-    }
 
     .content {
         display: flex;
         flex-direction: column;
+        min-height: 930px;
 
         .content-breadcrumb {
             padding: 15px;

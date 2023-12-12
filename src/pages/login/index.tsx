@@ -4,14 +4,15 @@ import { LockFilled, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
 import { crypto, AxiosResponseData, localStore } from 'utils';
 import { reqUserLogin, reqTouristLogin } from 'src/services'
-import {USER_INFO} from 'src/constants'
+import contants from 'src/constants'
 import './index.scss';
 
 const FormItem = Form.Item;
+const {USER_INFO} = contants;
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { message } = App.useApp();
+  const { modal, message } = App.useApp();
   const userInfo = localStore.get(USER_INFO);
 
   // 如果用户已经登陆，重定向到首页
@@ -29,11 +30,15 @@ const Login: React.FC = () => {
       password: encryptedPassword
     }
     reqUserLogin(params).then((res: AxiosResponseData) => {
-      console.log('res', res);
-      const {data, desc} = res;
-      message.success(desc)
+      const {resOutput: {data, msg}} = res;
+      message.success(msg)
       localStore.set(USER_INFO, data)
       navigate('/')
+    }).catch(error => {
+      modal.error({
+        title: error.title,
+        content: error.message
+      })
     })
   }
 

@@ -1,35 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import {menuRoutesConfig, type IMenuRouteConfigItem} from 'src/routes';
+import { menuRoutesConfig, type IMenuRouteConfigItem } from 'src/routes';
+import { ISiderBarProps, IMenuItem } from './interface'
+import './index.scss'
 
 const { Sider } = Layout;
 const { Link, useLocation } = ReactRouterDOM;
-interface IMenuItem {
-    label: React.ReactNode,
-    key: React.Key,
-    icon?: React.ReactNode,
-    children?: IMenuItem[],
-    type?: 'group',
-}
-
-const getMenuItems = (routesConfigList: IMenuRouteConfigItem[], prePath) => {
-    const result: IMenuItem[] = [];
-    routesConfigList.forEach(item => {
-        const currentPath = prePath ? `${prePath}/${item.path}` : item.path;
-        const menuItem: IMenuItem = {
-            label: <Link to={currentPath}>{item.label}</Link>,
-            key: item.path,
-            icon: item.icon,
-        };
-        if (item.children) {
-            menuItem.label = item.label;
-            menuItem.children = getMenuItems(item.children, currentPath)
-        }
-        result.push(menuItem)
-    })
-    return result
-}
 
 // 获取可展开菜单的key
 const getParentMenuKeys = (routesConfigList: IMenuRouteConfigItem[]) => {
@@ -43,11 +20,12 @@ const getParentMenuKeys = (routesConfigList: IMenuRouteConfigItem[]) => {
     return result
 }
 
-const SiderBar = (props) => {
+const SiderBar: React.FC<ISiderBarProps> = (props) => {
+    const { siderStyle: { siderBgColor, siderTextColor, siderBorderColor } } = props;
+
     const location = useLocation();
     const pathSnippets = location.pathname.split('/').filter((i) => i);
     const parentMenuKeys = getParentMenuKeys(menuRoutesConfig);
-
     const [selectedKeys, setSelectedKeys] = useState(() => {
         const state: string[] = [];
         const currentSelectedKey = pathSnippets[pathSnippets.length - 1];
@@ -74,7 +52,38 @@ const SiderBar = (props) => {
         setOpenKeys(currentOpenedKeys)
     }, [location])
 
-    const handleSelect = ({item, key}) => {
+    // 获取MenuItems
+    const getMenuItems = (routesConfigList: IMenuRouteConfigItem[], prePath) => {
+        const result: IMenuItem[] = [];
+        routesConfigList.forEach(item => {
+            const currentPath = prePath ? `${prePath}/${item.path}` : item.path;
+            const menuItem: IMenuItem = {
+                label: (
+                    <Link to={currentPath} style={{ color: siderTextColor }}>
+                        <span style={{ paddingRight: '10px' }}>{item.icon}</span>
+                        <span>{item.label}</span>
+                    </Link>
+                ),
+                key: item.path,
+            };
+            if (item.children) {
+                menuItem.label = (
+                    <div style={{ color: siderTextColor }}>
+                        <span style={{ paddingRight: '10px' }}>{item.icon}</span>
+                        <span>{item.label}</span>
+                    </div>
+                );
+                menuItem.children = getMenuItems(item.children, currentPath)
+            }
+            result.push(menuItem)
+        })
+        return result
+    }
+    const menuItems = getMenuItems(menuRoutesConfig, '/admin')
+
+
+
+    const handleSelect = ({ key }) => {
         setSelectedKeys([key])
     }
 
@@ -83,18 +92,15 @@ const SiderBar = (props) => {
     }
 
     return (
-        <Sider className='sider'>
-            <div className="sider-logo">
-                <h1>BMXZ<br />HTGLXT</h1>
-            </div>
+        <Sider className='siderbar' style={{ backgroundColor: siderBgColor, borderRight: `1px solid ${siderBorderColor}` }}>
             <Menu
                 mode='inline'
-                items={getMenuItems(menuRoutesConfig, '/admin')}
+                items={menuItems}
                 selectedKeys={selectedKeys}
                 openKeys={openKeys}
                 onSelect={handleSelect}
                 onOpenChange={handleOpenChange}
-                theme='light'
+                style={{ backgroundColor: siderBgColor, border: 0 }}
             />
         </Sider>
     )

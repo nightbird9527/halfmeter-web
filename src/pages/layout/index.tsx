@@ -1,22 +1,23 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { Layout, Breadcrumb } from 'antd';
-import { HomeOutlined } from '@ant-design/icons'
+import { HomeOutlined } from '@ant-design/icons';
 import SiderBar from './siderBar';
 import HeaderBar from './headerBar';
 import FooterBar from './footerBar';
-import { breadcrumbMap } from 'src/routes'
-import { USER_INFO } from 'src/constants'
-import {localStore} from 'src/utils'
-
-import './index.scss'
+import { breadcrumbMap } from 'src/routes';
+import contants from 'src/constants';
+import { localStore } from 'src/utils';
+import {useThemeStore} from 'src/zustand';
+import './index.scss';
 
 const { Outlet, useLocation, Link, useNavigate } = ReactRouterDOM;
-const { Content } = Layout;
+const {USER_INFO} = contants;
 
 const Layouts = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const {headerStyle, siderStyle, contentStyle, footerStyle} = useThemeStore(state => state);
 	const userInfo = localStore.get(USER_INFO);
 
 	useEffect(() => {
@@ -43,19 +44,20 @@ const Layouts = () => {
 	});
 	return (
 		<Layout className='layout'>
-			<SiderBar />
+			<HeaderBar headerStyle={headerStyle} />
 			<Layout>
-				<HeaderBar />
-				<Content className='content'>
+				<SiderBar siderStyle={siderStyle} />
+				<Layout.Content className='content' style={{backgroundColor: contentStyle.contentBgColor}}>
 					<div className="content-breadcrumb">
 						<Breadcrumb items={breadcrumbItems} />
 					</div>
 					<div className="content-container" >
 						<Outlet />
 					</div>
-				</Content>
-				<FooterBar />
+					
+				</Layout.Content>
 			</Layout>
+			<FooterBar footerStyle={footerStyle} />
 		</Layout>
 	)
 }

@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import { Table, Space, Button, Form, Input, Row, Col, Divider, Pagination, Modal } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Table, Space, Button, Form, Input, Row, Col, Divider, Pagination, Modal, App, DatePicker } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { reqFetchJournalList, reqCreateJournal, reqUpdateJournal, reqDeleteJournal } from 'src/services/journalService'
+import { AxiosResponseData } from 'utils'
+import dayjs from 'dayjs'
 import './index.scss'
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
+const { RangePicker } = DatePicker
 const modalTitleMap = {
 	'create': '新建',
 	'update': '编辑'
@@ -18,19 +22,19 @@ interface IJournalDataItem {
 }
 
 const JournalManage = () => {
+	const { modal, message } = App.useApp()
 	const [form] = Form.useForm()
-	const [selectedKeys, setSelectedKeys] = useState([]);
+	const [queryParams, setQueryParams] = useState({})
 	const [dataSource, setDataSource] = useState([]);
-	const [recordData, setRecordData] = useState({});
-	const [loading, setLoading] = useState(false);
+	const [recordData, setRecordData] = useState({} as any);
+	const [modalVisible, setModalVisible] = useState(false);
+	const [operateType, setOperateType] = useState('create');
+	const [tableLoading, setTableLoading] = useState(false);
 	const [pageInfo, setPageInfo] = useState({
 		current: 1,
 		pageSize: 10,
 		total: 0,
 	});
-	const [modalVisible, setModalVisible] = useState(false);
-	const [operateType, setOperateType] = useState('create');
-
 	const columns: ColumnsType<IJournalDataItem> = [
 		{
 			title: 'ID',
@@ -70,9 +74,47 @@ const JournalManage = () => {
 		},
 	];
 
+	// 日志列表查询接口请求函数
+	const fetchJournalList = (payload: any) => {
+		setTableLoading(true)
+		const { values, current, pageSize } = payload;
+		const input = {
+			content: values.content,
+			startDate: values.startDate,
+			endDate: values.endDate,
+			pageNo: current,
+			pageSize
+		}
+		reqFetchJournalList(input).then((res: AxiosResponseData) => {
+			const { total, dataList } = res.resOutput.data;
+			setQueryParams({ ...values })
+			setPageInfo({ current, pageSize, total })
+			setDataSource(dataList || [])
+		}).catch(error => {
+			modal.error({
+				title: error.title,
+				content: error.message
+			})
+		}).finally(() => {
+			setTableLoading(false)
+		});
+	}
+
 	// 查询
-	const handleSubmit = (values) => {
-		console.log(values);
+	const handleSubmit = () => {
+		form.validateFields(['content', 'date']).then(values => {
+			if (values.date && values.date.length) {
+				values.startDate = dayjs(values.date[0]).format('YYYYMMDD');
+				values.endDate = dayjs(values.date[1]).format('YYYYMMDD');
+				delete values.date
+			}
+			const payload = {
+				values,
+				current: 1,
+				pageSize: 10
+			};
+			fetchJournalList(payload)
+		})
 	}
 
 	// 重置
@@ -80,67 +122,125 @@ const JournalManage = () => {
 		form.resetFields();
 	}
 
+	// 翻页
+	const handlePageChange = (page, pageSize) => {
+		let current = page;
+		if (pageSize !== pageInfo.pageSize) {
+			current = 1;
+		}
+		const payload = {
+			values: { ...queryParams },
+			current,
+			pageSize
+		}
+		fetchJournalList(payload)
+	}
+
 	// 新建
-	const handleCreate = (record) => {
-		console.log(record);
+	const handleCreate = () => {
+		setOperateType('create');
 		setModalVisible(true);
 	}
 
 	// 编辑
 	const handleUpdate = (record) => {
-		console.log(record);
+		setOperateType('update');
 		setRecordData(record);
+		setModalVisible(true);
 	}
+
+	useEffect(() => {
+		if (modalVisible) {
+			if (operateType === 'create') {
+				form.setFieldValue('content_modal', '')
+			}
+			if (operateType === 'update') {
+				form.setFieldValue('content_modal', recordData.content)
+			}
+		} else {
+			form.resetFields(['content_modal'])
+		}
+	}, [modalVisible])
 
 	// 删除
 	const handleDelete = (record) => {
-		console.log(record);
-	}
-
-	// Table-rowSelection
-	const rowSelection = {
-		selectedRowKeys: selectedKeys,
-		onChange: (selectedKeys) => {
-			setSelectedKeys(selectedKeys);
-		}
-	}
-
-	// Pagination-onChange
-	const handlePageChange = (page, pageSize) => {
-		console.log(page, pageSize);
+		modal.confirm({
+			title: '提示',
+			content: '确认要删除该条日志吗？',
+			onOk: () => {
+				const payload = {
+					id: record.id
+				}
+				reqDeleteJournal(payload).then((res: AxiosResponseData) => {
+					const { resOutput } = res;
+					message.success(resOutput.msg)
+					const queryPayload = {
+						values: { ...queryParams },
+						current: pageInfo.current,
+						pageSize: pageInfo.pageSize
+					}
+					fetchJournalList(queryPayload)
+				}).catch(error => {
+					modal.error({
+						title: error.title,
+						content: error.message
+					})
+				})
+			}
+		})
 	}
 
 	// Modal提交
-	const handleModalFinish = (values) => {
-		console.log(values);
+	const handleModalFinish = () => {
+		form.validateFields(['content_modal']).then(values => {
+			if (operateType === 'create') {
+				const payload = {
+					content: values.content_modal
+				}
+				reqCreateJournal(payload).then((res: AxiosResponseData) => {
+					const { resOutput } = res;
+					message.success(resOutput.msg)
+					closeModal()
+					const queryPayload = {
+						values: { ...queryParams },
+						current: pageInfo.current,
+						pageSize: pageInfo.pageSize
+					}
+					fetchJournalList(queryPayload)
+				}).catch(error => {
+					modal.error({
+						title: error.title,
+						content: error.message
+					})
+				})
+			}
+			if (operateType === 'update') {
+				const payload = {
+					id: recordData.id,
+					content: values.content_modal
+				}
+				reqUpdateJournal(payload).then((res: AxiosResponseData) => {
+					const { resOutput } = res;
+					message.success(resOutput.msg)
+					closeModal()
+					const queryPayload = {
+						values: { ...queryParams },
+						current: pageInfo.current,
+						pageSize: pageInfo.pageSize
+					}
+					fetchJournalList(queryPayload)
+				}).catch(error => {
+					modal.error({
+						title: error.title,
+						content: error.message
+					})
+				})
+			}
+		})
 	}
 
 	// 关闭Modal
 	const closeModal = () => {
-		if (form.getFieldValue('contentModal')) {
-			const handleSaveAndClose = () => { }
-			const handleDestroy = () => {
-				modal.destroy();
-			}
-			const handleJustClose = () => {
-				modal.destroy();
-				setModalVisible(false)
-			}
-			const modal = Modal.confirm({
-				title: '提示',
-				content: '直接关闭的话内容将不会被保存，确认要继续吗?',
-				footer: (
-					<Row justify='center' style={{ marginTop: '10px' }}>
-						<Space>
-							<Button type='primary' onClick={handleSaveAndClose}>保存并关闭</Button>
-							<Button onClick={handleDestroy}>取消</Button>
-							<Button danger onClick={handleJustClose}>确定</Button>
-						</Space>
-					</Row>
-				)
-			})
-			return
-		}
 		setModalVisible(false)
 	}
 
@@ -150,13 +250,10 @@ const JournalManage = () => {
 				<Form form={form} onFinish={handleSubmit}>
 					<Row>
 						<Col span={8}>
-							<FormItem name='title'><Input placeholder='标题' /></FormItem>
-						</Col>
-						<Col span={8}>
 							<FormItem name='content'><Input placeholder='内容' /></FormItem>
 						</Col>
 						<Col span={8}>
-							<FormItem name='date'><Input placeholder='日期' /></FormItem>
+							<FormItem name='date'><RangePicker placeholder={['开始日期', '结束日期']} style={{ width: '100%' }} /></FormItem>
 						</Col>
 					</Row>
 					<Row>
@@ -179,9 +276,8 @@ const JournalManage = () => {
 					columns={columns}
 					dataSource={dataSource}
 					rowKey={record => record.id}
-					rowSelection={rowSelection}
 					pagination={false}
-					loading={loading}
+					loading={tableLoading}
 				/>
 			</div>
 			<div className="journal-pagination">
@@ -194,11 +290,19 @@ const JournalManage = () => {
 				/>
 			</div>
 			{
-				modalVisible && <Modal open={modalVisible} title={modalTitleMap[operateType]} footer={null} maskClosable={false} onCancel={closeModal}>
-					<Form form={form} onFinish={handleModalFinish}>
+				modalVisible ? <Modal open={modalVisible} title={modalTitleMap[operateType]} destroyOnClose={true} footer={null} maskClosable={false} onCancel={closeModal}>
+					<Form form={form} preserve={false} onFinish={handleModalFinish}>
 						<Row>
 							<Col span={24}>
-								<FormItem name='contentModal'>
+								<FormItem
+									name='content_modal'
+									rules={[
+										{
+											required: true,
+											message: '请输入内容'
+										}
+									]}
+								>
 									<TextArea autoSize={{ minRows: 6 }} maxLength={500} showCount={true} placeholder='请输入内容...' />
 								</FormItem>
 							</Col>
@@ -210,7 +314,7 @@ const JournalManage = () => {
 							</Space>
 						</Row>
 					</Form>
-				</Modal>
+				</Modal> : null
 			}
 		</div>
 	)

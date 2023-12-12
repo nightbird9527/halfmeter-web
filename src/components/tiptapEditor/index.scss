@@ -1,0 +1,21 @@
+.tiptap-editor-component {
+    width: 100%;
+    border: 1px solid #888;
+    border-radius: 20px;
+    margin: 0 0 20px 0;
+
+    .tiptap-editor-toolbar {
+        padding: 20px;
+        border-bottom: 1px solid #888;
+    }
+
+    .tiptap-editor-content {
+        padding: 20px;
+
+        .tiptap {
+            height: 100%;
+            min-height: 900px;
+            outline: none;
+        }
+    }
+}

@@ -21,7 +21,6 @@
     "@types/react-dom": "^18.2.4",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
-    "antd": "^5.5.1",
     "axios": "^1.4.0",
     "babel-loader": "^9.1.2",
     "chalk": "^4.1.2",
@@ -52,7 +51,15 @@
     "webpack-manifest-plugin": "^5.0.0"
   },
   "dependencies": {
+    "@tiptap/extension-color": "^2.1.7",
+    "@tiptap/extension-text-style": "^2.1.7",
+    "@tiptap/pm": "^2.1.7",
+    "@tiptap/react": "^2.1.7",
+    "@tiptap/starter-kit": "^2.1.7",
+    "antd": "^5.8.4",
     "crypto-js": "^4.1.1",
+    "dayjs": "^1.11.9",
+    "react-icons": "^4.10.1",
     "zustand": "^4.3.9"
   }
 }
