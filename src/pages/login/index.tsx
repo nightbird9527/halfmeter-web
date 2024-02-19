@@ -27,7 +27,8 @@ const Login: React.FC = () => {
     const encryptedPassword = crypto.encryptSHA256(values.password);
     const params = {
       nameOrEmail: values.nameOrEmail,
-      password: encryptedPassword
+      // password: encryptedPassword
+      password: values.password
     }
     reqUserLogin(params).then((res: AxiosResponseData) => {
       const {resOutput: {data, msg}} = res;

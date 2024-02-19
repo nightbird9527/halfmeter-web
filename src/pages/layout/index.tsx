@@ -45,7 +45,7 @@ const Layouts = () => {
 	return (
 		<Layout className='layout'>
 			<HeaderBar headerStyle={headerStyle} />
-			<Layout>
+			<Layout className='layout-center'>
 				<SiderBar siderStyle={siderStyle} />
 				<Layout.Content className='content' style={{backgroundColor: contentStyle.contentBgColor}}>
 					<div className="content-breadcrumb">
@@ -54,7 +54,6 @@ const Layouts = () => {
 					<div className="content-container" >
 						<Outlet />
 					</div>
-					
 				</Layout.Content>
 			</Layout>
 			<FooterBar footerStyle={footerStyle} />
