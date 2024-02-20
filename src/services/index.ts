@@ -3,6 +3,7 @@ export {reqUserLogin, reqTouristLogin} from './loginService'
 export {reqFetchArticalList, reqCreateArtical, reqUpdateArtical, reqDeleteArtical} from './articalService'
 export {reqFetchTagList, reqCreateTag, reqUpdateTag, reqDeleteTag} from './tagService'
 export {reqFetchJournalList, reqCreateJournal, reqUpdateJournal, reqDeleteJournal} from './journalService'
+export {reqFetchRoleList, reqCreateRole, reqUpdateRole, reqDeleteRole} from './roleService'
 
 const baseURL = '/commonService'
 

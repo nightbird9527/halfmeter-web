@@ -1,12 +1,14 @@
-.tag {
+.role {
 
-    .tag-tablebar {
+    .role-form {}
+
+    .role-tablebar {
         display: flex;
         margin-bottom: 10px;
         flex-direction: row-reverse;
     }
 
-    .tag-pagination {
+    .role-pagination {
         display: flex;
         margin-top: 10px;
         flex-direction: row-reverse;
