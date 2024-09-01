@@ -122,7 +122,7 @@ const HeaderBar: React.FC<IHeaderBarProps> = (props) => {
 			</div>
 			<div className="header-user">
 				<Dropdown dropdownRender={userDropDownRender} placement="bottom">
-					<span style={{ color: headerTextColor }} className='header-user-detail'><FaUserLarge style={{ color: colorPrimary, margin: '0 5px' }} />{userInfo && userInfo.user_name}</span>
+					<span style={{ color: headerTextColor }} className='header-user-detail'><FaUserLarge style={{ color: colorPrimary, margin: '0 5px' }} />{userInfo && userInfo.userName}</span>
 				</Dropdown>
 			</div>
 		</Header>

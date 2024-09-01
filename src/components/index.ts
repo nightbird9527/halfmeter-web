@@ -1,2 +1,2 @@
-export {default as MaxTable} from './maxTable'
+export {default as FlexoTable} from './flexoTable'
 export {default as TiptapEditor} from './tiptapEditor'
