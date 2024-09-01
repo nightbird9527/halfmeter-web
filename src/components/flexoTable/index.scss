@@ -1,0 +1,16 @@
+.flexo-table {
+
+    .flexo-table-buttons {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+    .flexo-table-main {
+        margin: 10px 0;
+    }
+
+    .flexo-table-pagination {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+}

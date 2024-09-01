@@ -26,7 +26,7 @@ const Login: React.FC = () => {
   const onFinish = (values) => {
     const encryptedPassword = crypto.encryptSHA256(values.password);
     const params = {
-      nameOrEmail: values.nameOrEmail,
+      username: values.username,
       // password: encryptedPassword
       password: values.password
     }
@@ -64,10 +64,10 @@ const Login: React.FC = () => {
           size='large'
         >
           <FormItem
-            name='nameOrEmail'
+            name='username'
             rules={[{ required: true, message: 'Please input your username!' }]}
           >
-            <Input prefix={<UserOutlined />} placeholder='用户名/邮箱' />
+            <Input prefix={<UserOutlined />} placeholder='用户名' />
           </FormItem>
           <FormItem
             name='password'

@@ -21,7 +21,7 @@ const Layouts = () => {
 	const userInfo = localStore.get(USER_INFO);
 
 	useEffect(() => {
-		if (!userInfo || !userInfo.user_name) {
+		if (!userInfo || !userInfo.userName) {
 			navigate('/login')
 		}
 	}, [])

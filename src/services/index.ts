@@ -1,13 +1,15 @@
-import {request} from 'utils'
-export {reqUserLogin, reqTouristLogin} from './loginService'
-export {reqFetchArticalList, reqCreateArtical, reqUpdateArtical, reqDeleteArtical} from './articalService'
-export {reqFetchTagList, reqCreateTag, reqUpdateTag, reqDeleteTag} from './tagService'
-export {reqFetchJournalList, reqCreateJournal, reqUpdateJournal, reqDeleteJournal} from './journalService'
-export {reqFetchRoleList, reqCreateRole, reqUpdateRole, reqDeleteRole} from './roleService'
+export * from './loginService';
+export * from './articalService';
+export * from './tagService';
+export * from './journalService';
+export * from './roleService';
+export * from './userService';
 
-const baseURL = '/commonService'
+import {request} from 'utils';
+
+const baseURL = '/commonService';
 
 // 查询天气
 export const reqFetchWeather = (payload?: any) => {
-    return request.post(`${baseURL}/queryWeather`, payload)
-}
+  return request.post(`${baseURL}/queryWeather`, payload);
+};
