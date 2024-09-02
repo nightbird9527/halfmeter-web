@@ -67,6 +67,7 @@
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.9",
     "react-icons": "^4.10.1",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "zustand": "^4.3.9"
   }
