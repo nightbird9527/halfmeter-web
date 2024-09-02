@@ -1,95 +1,59 @@
 const path = require('path');
-const paths = require('./paths');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
 
-module.exports = function (webpackEnv) {
-  const isEnvDevelopment = webpackEnv === 'development';
-  const isEnvProduction = webpackEnv === 'production';
-  const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
-
-  const getStyleLoaders = (cssLoaderOptions, preprocessor) => {
-    const loaders = [
-      isEnvDevelopment && require.resolve('style-loader'),
-      isEnvProduction && MiniCssExtractPlugin.loader,
-      {
-        loader: require.resolve('css-loader'),
-        options: cssLoaderOptions,
-      },
-      {
-        loader: 'postcss-loader',
-        options: {
-          postcssOptions: {
-            plugins: [['postcss-preset-env']],
-          },
-          sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-        },
-      },
-    ].filter(Boolean);
-    if (preprocessor) {
-      loaders.push({
-        loader: require.resolve(preprocessor),
-        options: {
-          sourceMap: true,
-        },
-      });
-    }
-    return loaders;
-  };
+module.exports = function (env) {
+  const isEnvDevelopment = env === 'development';
+  const isEnvProduction = env === 'production';
 
   return {
-    // mode: webpackEnv,
-    mode: 'development',
+    mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     entry: {
       main: './src/index.js',
     },
-    devtool: isEnvDevelopment ? 'eval-source-map' : isEnvProduction && shouldUseSourceMap ? 'source-map' : false,
+    devtool: isEnvDevelopment ? 'source-map' : false,
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js', 'jsx', '...'],
+      alias: {
+        '@': path.resolve(process.cwd(), './src/'),
+        src: path.resolve(process.cwd(), './src/'),
+        utils: path.resolve(process.cwd(), './src/utils'),
+      },
+    },
+    output: {
+      path: path.resolve(process.cwd(), './build'),
+      filename: 'js/[name].[contenthash].js',
+      chunkFilename: 'js/[name].[contenthash].chunk.js',
+      publicPath: '/admin',
+    },
+    optimization: {
+      runtimeChunk: 'single',
+      splitChunks: {
+        cacheGroups: {
+          vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+        },
+      },
+      minimizer: [new CssMinimizerPlugin()],
+    },
     module: {
       rules: [
         {
-          test: /\.css$/,
-          use: getStyleLoaders({
-            importLoaders: 1,
-            sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-            modules: {
-              mode: (resourcePath) => {
-                if (/global.css$/i.test(resourcePath)) {
-                  return 'global';
-                }
-                return 'local';
-              },
-            },
-          }),
-        },
-        {
-          test: /\.(scss|sass)$/,
-          use: getStyleLoaders(
-            {
-              importLoaders: 3,
-              sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-              modules: false,
-            },
-            'sass-loader'
-          ),
+          test: /\.css$/i,
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         {
           test: /\.less$/,
-          use: getStyleLoaders(
-            {
-              importLoaders: 2,
-              sourceMap: isEnvProduction && shouldUseSourceMap,
-              modules: {
-                mode: (resourcePath) => {
-                  if (/global.less$/i.test(resourcePath)) {
-                    return 'global';
-                  }
-                  return 'local';
-                },
-              },
-            },
-            'less-loader'
-          ),
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'less-loader'],
+        },
+        {
+          test: /\.(scss|sass)$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
         },
         {
           test: /\.(ts|tsx|js|jsx)$/,
@@ -100,69 +64,34 @@ module.exports = function (webpackEnv) {
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
-          type: 'asset/resource',
+          type: 'asset',
+          generator: {
+            filename: 'images/[hash][ext]',
+          },
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/i,
           type: 'asset/resource',
+          generator: {
+            filename: 'fonts/[hash][ext]',
+          },
         },
       ],
     },
     plugins: [
-      new HtmlWebpackPlugin(
-        Object.assign(
-          {},
-          {
-            inject: 'body',
-            template: paths.appHtml,
-          }
-        )
-      ),
+      new HtmlWebpackPlugin({
+        template: path.resolve(process.cwd(), 'src/assets/index.html'),
+        title: '半米小站-后台管理系统',
+        inject: 'body',
+        filename: 'index.html',
+      }),
       new MiniCssExtractPlugin({
-        filename: 'static/css/[name].[contenthash].css',
-        chunkFilename: 'static/css/[name].[contenthash].chunk.css',
+        filename: 'css/[name].[contenthash].css',
+        chunkFilename: 'css/[name].[contenthash].chunk.css',
       }),
       new WebpackManifestPlugin({
-        fileName: 'asset-manifest.json',
-        // publicPath: paths.publicUrlOrPath,
-        generate: (seed, files, entrypoints) => {
-          const manifestFiles = files.reduce((manifest, file) => {
-            manifest[file.name] = file.path;
-            return manifest;
-          }, seed);
-          const entrypointFiles = entrypoints.main.filter((fileName) => !fileName.endsWith('.map'));
-          return {
-            files: manifestFiles,
-            entrypoints: entrypointFiles,
-          };
-        },
+        fileName: 'manifest.json',
       }),
     ],
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          vendors: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
-          },
-        },
-      },
-    },
-    output: {
-      filename: 'static/js/[name].[contenthash].bundle.js',
-      chunkFilename: 'static/js/[name].[contenthash].chunk.js',
-      assetModuleFilename: 'static/media/[contenthash][ext]',
-      path: path.resolve(process.cwd(), './build'),
-      publicPath: '/',
-      clean: true,
-    },
-    resolve: {
-      extensions: ['.ts', '.tsx', '.jsx', '...'],
-      alias: {
-        utils$: path.resolve(process.cwd(), './src/utils/index.ts'),
-        src: path.resolve(process.cwd(), './src/'),
-      },
-    },
   };
 };

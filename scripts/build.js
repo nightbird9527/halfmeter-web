@@ -9,8 +9,9 @@ const webpackConfig = webpackConfigFactory(env);
 const compiler = webpack(webpackConfig);
 
 compiler.run((err, stats) => {
-    if (!err) {
-        // console.log(process.env);
-        console.log(chalk.green.bold('Build Successfully!'));
-    }
+  if (!err) {
+    // console.log(process.env);
+    return console.log(chalk.green.bold('Build Successfully!'));
+  }
+  console.log(err);
 });
