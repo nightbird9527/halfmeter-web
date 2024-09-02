@@ -1,9 +1,16 @@
 pipeline {
     agent any
     stages {
-        stage('Install Dependencies') { 
+        stage('Install Dependencies') {
             steps {
                 sh 'npm install'
+            }
+        }
+        stage('Add Execute Permission') {
+            steps {
+                sh 'chmod +x jenkins/scripts/test.sh'
+                sh 'chmod +x jenkins/scripts/build.sh'
+                sh 'chmod +x jenkins/scripts/deliver.sh'
             }
         }
         stage('Test') { 
