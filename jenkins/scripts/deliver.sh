@@ -14,7 +14,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # 重启nginx
-sudo systemctl restart nginx
+sudo -S systemctl restart nginx
 if [ $? -ne 0 ]; then
   exit 1
 fi
