@@ -26,7 +26,8 @@ module.exports = function (env) {
       path: path.resolve(process.cwd(), './build'),
       filename: 'js/[name].[contenthash].js',
       chunkFilename: 'js/[name].[contenthash].chunk.js',
-      publicPath: '/admin',
+      publicPath: '/admin/',
+      clean: true,
     },
     optimization: {
       runtimeChunk: 'single',
