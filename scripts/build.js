@@ -1,5 +1,3 @@
-require('../config/env');
-
 const chalk = require('chalk');
 const webpack = require('webpack');
 const webpackConfigFactory = require('../config/webpack.config');
