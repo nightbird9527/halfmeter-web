@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    stages {
+        stage('Install Dependencies') { 
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Test') { 
+            steps {
+                sh './scripts/test.sh'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh './scripts/build.sh'
+            }
+        }
+        stage('Deliver') {
+            steps {
+              sh './scripts/deliver.sh'
+              input message: 'Finished using the web site? (Click "Proceed" to continue)'
+            }
+        }
+    }
+}
