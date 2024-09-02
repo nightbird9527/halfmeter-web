@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        NGINX_SUDO_PASSWORD=credentials('root-credential')
+        SUDO_PASSWORD=credentials('root-credential')
+        JENKINS_PASSWORD=credentials('jenkins-user-credential')
     }
     stages {
         stage('Install Dependencies') {
