@@ -5,7 +5,8 @@
 			{
 				"targets": {
 					"chrome": "58",
-					"ie": "11"
+					"ie": "11",
+					"node": "current"
 				}
 			}
 		],
@@ -15,7 +16,7 @@
 		],
 		[
 			"@babel/preset-react",
-			{}
-		]
+			{"runtime": "automatic"}
+		],
 	]
 }
