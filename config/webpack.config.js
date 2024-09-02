@@ -153,7 +153,7 @@ module.exports = function (webpackEnv) {
       filename: 'static/js/[name].[contenthash].bundle.js',
       chunkFilename: 'static/js/[name].[contenthash].chunk.js',
       assetModuleFilename: 'static/media/[contenthash][ext]',
-      path: path.resolve(process.cwd(), './dist'),
+      path: path.resolve(process.cwd(), './build'),
       publicPath: '/',
       clean: true,
     },
