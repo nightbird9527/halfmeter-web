@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        NGINX_SUDO_PASSWORD=credentials('root-credential')
+    }
     stages {
         stage('Install Dependencies') {
             steps {
