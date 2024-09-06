@@ -74,6 +74,9 @@ module.exports = function (env) {
         //         avif: {
         //           lossless: true,
         //         },
+        //         keepExif: true,
+        //         keepIccProfile: true,
+        //         keepMetadata: true,
         //       },
         //     },
         //   },
