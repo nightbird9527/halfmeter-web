@@ -54,30 +54,30 @@ module.exports = function (env) {
           },
           extractComments: false,
         }),
-        new ImageMinimizerPlugin({
-          minimizer: {
-            implementation: ImageMinimizerPlugin.sharpMinify,
-            options: {
-              encodeOptions: {
-                /**
-                 * https://sharp.pixelplumbing.com/api-output
-                 * jpeg、webp默认为80，avif默认为50，因此需显示配置
-                 * png默认为100，相当于lossless，无需显示配置
-                 * gif不支持lossless
-                 */
-                jpeg: {
-                  quality: 100,
-                },
-                webp: {
-                  lossless: true,
-                },
-                avif: {
-                  lossless: true,
-                },
-              },
-            },
-          },
-        }),
+        // new ImageMinimizerPlugin({
+        //   minimizer: {
+        //     implementation: ImageMinimizerPlugin.sharpMinify,
+        //     options: {
+        //       encodeOptions: {
+        //         /**
+        //          * https://sharp.pixelplumbing.com/api-output
+        //          * jpeg、webp默认为80，avif默认为50，因此需显示配置
+        //          * png默认为100，相当于lossless，无需显示配置
+        //          * gif不支持lossless
+        //          */
+        //         jpeg: {
+        //           quality: 100,
+        //         },
+        //         webp: {
+        //           lossless: true,
+        //         },
+        //         avif: {
+        //           lossless: true,
+        //         },
+        //       },
+        //     },
+        //   },
+        // }),
       ],
     },
     module: {

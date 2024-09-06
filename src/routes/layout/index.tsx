@@ -11,7 +11,7 @@ import JournalManage from 'src/pages/journal';
 
 export default (
   <>
-    <Route index Component={HomePage}></Route>
+    <Route path="home" Component={HomePage}></Route>
     <Route path="tagManage" Component={TagManage}></Route>
     <Route path="articalManage" Component={ArticalManage}></Route>
     <Route path="authorityManage">

@@ -7,7 +7,7 @@ import {useThemeStore} from 'src/zustand';
 import {topRoutes} from '@/routes';
 
 const router = createBrowserRouter(topRoutes, {
-  basename: '/',
+  basename: '/admin',
 });
 
 export default function App() {
