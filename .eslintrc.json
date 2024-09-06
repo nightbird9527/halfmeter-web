@@ -18,6 +18,6 @@
   "rules": {
     "eqeqeq": "error",
     "no-duplicate-imports": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
   }
 }

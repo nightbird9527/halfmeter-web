@@ -1,2 +1,2 @@
-export {default as menuRoutesConfig, type IMenuRouteConfigItem} from './menuRoutes'
-export {default as breadcrumbMap} from './breadcrumbMap'
+export {default as topRoutes} from './topRoutes';
+export {default as crumbsMap} from './crumbsMap';
