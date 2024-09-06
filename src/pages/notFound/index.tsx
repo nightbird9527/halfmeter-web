@@ -2,7 +2,11 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Button} from 'antd';
 
-const NotFound = () => {
+export async function loader() {
+  return null;
+}
+
+export default function NotFound() {
   const navigate = useNavigate();
 
   const handleBackHome = () => {
@@ -18,6 +22,4 @@ const NotFound = () => {
       to back to the home page...
     </div>
   );
-};
-
-export default NotFound;
+}

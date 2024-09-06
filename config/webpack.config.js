@@ -1,8 +1,11 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const {WebpackManifestPlugin} = require('webpack-manifest-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin'); // 配置index.html模板
+const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 将css模块提取为单独的文件
+const {WebpackManifestPlugin} = require('webpack-manifest-plugin'); // 生成manifest.json
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer'); // 打包资源分析
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin'); // 压缩css资源
+const TerserPlugin = require('terser-webpack-plugin'); // 压缩js资源
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin'); // 压缩图片资源
 
 module.exports = function (env) {
   const isEnvDevelopment = env === 'development';
@@ -11,7 +14,7 @@ module.exports = function (env) {
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     entry: {
-      main: './src/index.js',
+      main: './src/index.tsx',
     },
     devtool: isEnvDevelopment ? 'source-map' : false,
     resolve: {
@@ -26,10 +29,11 @@ module.exports = function (env) {
       path: path.resolve(process.cwd(), './build'),
       filename: 'js/[name].[contenthash].js',
       chunkFilename: 'js/[name].[contenthash].chunk.js',
-      publicPath: '/admin/',
+      publicPath: isEnvProduction ? '/admin/' : isEnvDevelopment && '/',
       clean: true,
     },
     optimization: {
+      minimize: true,
       runtimeChunk: 'single',
       splitChunks: {
         cacheGroups: {
@@ -40,7 +44,41 @@ module.exports = function (env) {
           },
         },
       },
-      minimizer: [new CssMinimizerPlugin()],
+      minimizer: [
+        new CssMinimizerPlugin(),
+        new TerserPlugin({
+          terserOptions: {
+            format: {
+              comments: false,
+            },
+          },
+          extractComments: false,
+        }),
+        new ImageMinimizerPlugin({
+          minimizer: {
+            implementation: ImageMinimizerPlugin.sharpMinify,
+            options: {
+              encodeOptions: {
+                /**
+                 * https://sharp.pixelplumbing.com/api-output
+                 * jpeg、webp默认为80，avif默认为50，因此需显示配置
+                 * png默认为100，相当于lossless，无需显示配置
+                 * gif不支持lossless
+                 */
+                jpeg: {
+                  quality: 100,
+                },
+                webp: {
+                  lossless: true,
+                },
+                avif: {
+                  lossless: true,
+                },
+              },
+            },
+          },
+        }),
+      ],
     },
     module: {
       rules: [
@@ -92,6 +130,11 @@ module.exports = function (env) {
       }),
       new WebpackManifestPlugin({
         fileName: 'manifest.json',
+      }),
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'disabled',
+        generateStatsFile: false,
+        statsOptions: {source: false},
       }),
     ],
   };

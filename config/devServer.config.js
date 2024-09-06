@@ -2,21 +2,16 @@ const path = require('path');
 
 module.exports = function () {
   return {
-    allowedHosts: 'all',
+    host: 'localhost',
     port: 3000,
     open: true,
     hot: true,
+    allowedHosts: 'all',
     static: {
-      directory: path.resolve(process.cwd(), './public'),
-      publicPath: '/admin',
+      directory: path.resolve(process.cwd(), 'public'),
+      publicPath: '/',
     },
-    historyApiFallback: {
-      rewrites: [
-        {from: /\//, to: '/admin/index.html'},
-        {from: /^\/admin\/?$/, to: '/admin/index.html'},
-        {from: /^\/admin\/.*/, to: '/admin/index.html'},
-      ],
-    },
+    historyApiFallback: true,
     proxy: {
       '/halfmeter-admin': 'http://localhost:8080',
     },
