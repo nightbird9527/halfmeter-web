@@ -1,47 +1,65 @@
-import React from 'react';
-import {Button, ButtonProps, Table, TableProps, Pagination, PaginationProps} from 'antd';
-import {getTypeOf} from 'src/utils';
+import React, {useState, useMemo} from 'react';
+import {Table, Button, Dropdown, Checkbox} from 'antd';
+import type {FlexoButton, FlexoTableProps} from './types';
+import {getTypeOf} from '@/utils/tools';
+import ColumnOperator from './columnOperator';
 import './index.scss';
 
-interface IButtonConfig extends ButtonProps {
-  label: string;
-}
+/**
+ * @description FlexoTable组件，集成下载功能
+ *
+ * @param {object} props - 组件props
+ * @param {object} props.flexoConfig - 配置项
+ * @param {object | array} props.flexoConfig.btnConfig - 按钮配置
+ * @param {string} props.flexoConfig.btnConfig.showText - 按钮显示文本
+ * @param {object} props.flexoConfig.download - 下载配置
+ * @returns {React.ReactElement}
+ */
+const FlexoTable: React.FC<FlexoTableProps> = (props) => {
+  const {flexoConfig, columns, ...restProps} = props;
 
-interface IFlexoTableProps extends TableProps<any> {
-  upperBtnsConfig?: IButtonConfig | IButtonConfig[];
-}
+  // #region 列操作
 
-const FlexoTable: React.FC<IFlexoTableProps> = (props) => {
-  const {upperBtnsConfig, pagination, ...restTableProps} = props;
+  // #endregion
 
-  // 渲染表格上方按钮
-  const renderButtonsAboveTable = () => {
-    if (typeof upperBtnsConfig === 'undefined') {
-      return null;
-    } else if (Array.isArray(upperBtnsConfig)) {
-      return upperBtnsConfig.map((btnConfig) => {
-        const {label, ...restBtnProps} = btnConfig;
-        return <Button {...restBtnProps}>{label}</Button>;
+  // #region 按钮渲染
+  const upperButtons = flexoConfig?.upperButtons;
+  const buttonElements = useMemo((): JSX.Element[] | undefined => {
+    if (!upperButtons) return;
+    const configs = [] as FlexoButton[];
+    if (getTypeOf(upperButtons) === 'array') {
+      (upperButtons as FlexoButton[]).forEach((config: FlexoButton, index: number) => {
+        configs.push(config);
       });
-    } else if (getTypeOf(upperBtnsConfig) === 'Object') {
-      const {label, ...restBtnProps} = upperBtnsConfig;
-      return <Button {...restBtnProps}>{upperBtnsConfig.label}</Button>;
     }
-  };
+    if (getTypeOf(upperButtons) === 'object') {
+      configs.push(upperButtons as FlexoButton);
+    }
+    return configs.map((config, index) => {
+      const {showText = `Button${index}`, ...props} = config;
+      return (
+        <Button key={index} {...props}>
+          {showText}
+        </Button>
+      );
+    });
+  }, [upperButtons]);
+  // #endregion
+
+  // #region 下载逻辑
+  const downloadConfig = flexoConfig?.download;
+  // #endregion
 
   return (
     <div className="flexo-table">
-      <div className="flexo-table-buttons">{renderButtonsAboveTable()}</div>
-      <div className="flexo-table-main">
-        <Table pagination={false} {...restTableProps} />
+      <div className="flexo-table-upper clearfix">
+        <div className="flexo-table-upper-filter">
+          <ColumnOperator columns={columns} />
+        </div>
+        <div className="flexo-table-upper-btns">{upperButtons && buttonElements}</div>
       </div>
-      <div className="flexo-table-pagination">
-        <Pagination
-          showTotal={(total) => `共${total}条`}
-          showSizeChanger={true}
-          pageSizeOptions={[10, 20, 30, 40, 50]}
-          {...pagination}
-        />
+      <div className="flexo-table-main">
+        <Table columns={columns} {...restProps} />
       </div>
     </div>
   );

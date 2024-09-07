@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Form, Button, Input, Row, Col, App} from 'antd';
 import {LockFilled, UserOutlined} from '@ant-design/icons';
 import {useNavigate} from 'react-router-dom';
-import {crypto, AxiosResponseData, localStore} from 'utils';
+import {AxiosResponseData, localStore} from 'utils';
 import {reqUserLogin, reqTouristLogin} from 'src/services';
 import contants from 'src/constants';
 import './index.scss';
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
 
   // 登陆
   const onFinish = (values) => {
-    const encryptedPassword = crypto.encryptSHA256(values.password);
+    // const encryptedPassword = crypto.encryptSHA256(values.password);
     const params = {
       username: values.username,
       // password: encryptedPassword

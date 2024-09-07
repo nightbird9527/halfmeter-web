@@ -54,7 +54,7 @@ class Request {
               content: resOutput.msg,
               onOk: () => {
                 localStore.remove(USER_INFO);
-                location.href = '/login';
+                location.href = '/admin/login';
               },
             });
           }

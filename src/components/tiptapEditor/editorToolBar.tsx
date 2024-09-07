@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Button, Space} from 'antd';
-import {eventEmitter} from 'src/utils';
+import {EventBus} from 'src/utils';
 
 interface IEditorToolbarProps {
   editor: any;
@@ -12,7 +12,7 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = (props) => {
   const {editor, editorIsEmptyRef, editorContentRef} = props;
 
   useEffect(() => {
-    eventEmitter.subscribe('tiptapFinish', () => {
+    EventBus.subscribe('tiptapFinish', () => {
       editorIsEmptyRef.current = editor?.isEmpty;
       editorContentRef.current = editor?.getHTML();
     });

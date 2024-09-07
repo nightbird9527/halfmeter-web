@@ -4,7 +4,7 @@ import {EditOutlined} from '@ant-design/icons';
 import {FlexoTable} from 'src/components';
 import dayjs from 'dayjs';
 import TiptapEditor from 'src/components/tiptapEditor';
-import {eventEmitter} from 'src/utils';
+import {EventBus} from 'src/utils';
 import {reqFetchTagList, reqFetchArticalList, reqCreateArtical, reqUpdateArtical, reqDeleteArtical} from 'src/services';
 import './index.scss';
 
@@ -295,7 +295,7 @@ const ArticalManage = () => {
   // Modal保存
   const handleModalFinish = () => {
     form.validateFields(['title_modal', 'category_modal', 'status_modal']).then((values) => {
-      eventEmitter.publish('tiptapFinish');
+      EventBus.publish('tiptapFinish');
       const editorIsEmpty = editorIsEmptyRef.current;
       const editorContent = editorContentRef.current;
       if (editorIsEmpty) {

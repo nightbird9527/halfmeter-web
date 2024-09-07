@@ -1,16 +1,23 @@
 .flexo-table {
+  .flexo-table-upper {
+    margin: 20px 0;
 
-    .flexo-table-buttons {
-        display: flex;
-        flex-direction: row-reverse;
+    .flexo-table-upper-filter {
+      float: left;
     }
 
-    .flexo-table-main {
-        margin: 10px 0;
-    }
+    .flexo-table-upper-btns {
+      float: right;
+      display: flex;
+      justify-content: end;
 
-    .flexo-table-pagination {
-        display: flex;
-        flex-direction: row-reverse;
+      button {
+        margin: 0 0 0 10px;
+      }
     }
+  }
+
+  .flexo-table-main {
+    margin: 10px 0;
+  }
 }
