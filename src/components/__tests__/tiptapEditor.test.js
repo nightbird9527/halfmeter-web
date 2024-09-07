@@ -1,5 +1,5 @@
 import {screen, render} from '@testing-library/react';
-import {TiptapEditor} from 'src/components';
+import {TiptapEditor} from '@/components';
 
 test('load and display bold', async () => {
   render(<TiptapEditor editorIsEmptyRef={true} editorContentRef={{current: ''}} />);
