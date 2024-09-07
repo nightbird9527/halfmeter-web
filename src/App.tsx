@@ -6,8 +6,10 @@ import 'dayjs/locale/zh-cn';
 import {useThemeStore} from 'src/zustand';
 import {topRoutes} from '@/routes';
 
+const env = process.env.NODE_ENV;
+
 const router = createBrowserRouter(topRoutes, {
-  basename: '/admin',
+  basename: env === 'production' ? '/admin' : '/',
 });
 
 export default function App() {

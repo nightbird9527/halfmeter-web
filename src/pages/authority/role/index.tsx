@@ -11,7 +11,7 @@ const statusMap = {
   inactive: '禁用',
 };
 
-const Role = () => {
+const RoleManage = () => {
   const [form] = Form.useForm();
   const {modal, message} = App.useApp();
   const [queryParams, setQueryParams] = useState({});
@@ -397,4 +397,4 @@ const Role = () => {
   );
 };
 
-export default Role;
+export default RoleManage;

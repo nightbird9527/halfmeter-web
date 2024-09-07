@@ -4,7 +4,7 @@ module.exports = function () {
   return {
     host: 'localhost',
     port: 3000,
-    open: true,
+    open: '/',
     hot: true,
     allowedHosts: 'all',
     static: {

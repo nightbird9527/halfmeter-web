@@ -122,7 +122,8 @@ module.exports = function (env) {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: path.resolve(process.cwd(), 'src/assets/index.html'),
+        template: path.resolve(process.cwd(), './public/index.html'),
+        favicon: path.resolve(process.cwd(), './public/favicon.ico'),
         title: '半米小站-后台管理系统',
         inject: 'body',
         filename: 'index.html',
