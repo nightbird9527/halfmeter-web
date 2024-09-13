@@ -387,10 +387,12 @@ const TagManage = () => {
       </Form>
       <Divider orientation="center">💙💙💙</Divider>
       <FlexoTable
-        upperBtnsConfig={{
-          label: '新建标签',
-          type: 'primary',
-          onClick: handleCreate,
+        flexoConfig={{
+          upperButtons: {
+            showText: '新建标签',
+            type: 'primary',
+            onClick: handleCreate,
+          },
         }}
         bordered
         columns={columns}

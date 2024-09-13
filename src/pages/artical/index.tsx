@@ -411,11 +411,13 @@ const ArticalManage = () => {
       </Form>
       <Divider orientation="center">🧡🧡🧡</Divider>
       <FlexoTable
-        upperBtnsConfig={{
-          label: '写文章',
-          type: 'primary',
-          icon: <EditOutlined />,
-          onClick: handleCreate,
+        flexoConfig={{
+          upperButtons: {
+            showText: '写文章',
+            type: 'primary',
+            icon: <EditOutlined />,
+            onClick: handleCreate,
+          },
         }}
         bordered
         columns={columns}

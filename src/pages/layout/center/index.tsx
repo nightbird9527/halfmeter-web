@@ -104,11 +104,11 @@ const Center = () => {
           onSelect={handleSelectChange}
           openKeys={openedMenuKeys}
           onOpenChange={handleOpenChange}
-          style={{height: '100%'}}
+          // style={{height: '100%'}}
         />
       </div>
       <div className="center-main">
-        <div className="center-main-breadcrumb">
+        <div className={`center-main-breadcrumb ${themeFlag}`}>
           <Breadcrumb items={breadcrumbItems} />
         </div>
         <div className="center-main-content">

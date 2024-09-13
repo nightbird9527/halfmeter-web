@@ -296,10 +296,12 @@ const JournalManage = () => {
       </Form>
       <Divider orientation="center">🧡🧡🧡</Divider>
       <FlexoTable
-        upperBtnsConfig={{
-          label: '新建日志',
-          type: 'primary',
-          onClick: handleCreate,
+        flexoConfig={{
+          upperButtons: {
+            showText: '新建日志',
+            type: 'primary',
+            onClick: handleCreate,
+          },
         }}
         bordered
         columns={columns}

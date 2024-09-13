@@ -335,10 +335,12 @@ const RoleManage = () => {
       </Form>
       <Divider orientation="center">💙💙💙</Divider>
       <FlexoTable
-        upperBtnsConfig={{
-          label: '新建角色',
-          type: 'primary',
-          onClick: handleCreate,
+        flexoConfig={{
+          upperButtons: {
+            showText: '新建角色',
+            type: 'primary',
+            onClick: handleCreate,
+          },
         }}
         bordered
         columns={columns}

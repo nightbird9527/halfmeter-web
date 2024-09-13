@@ -18,7 +18,7 @@
 .light {
   color: var(--color-black);
   background-color: var(--color-white);
-  border-color: var(--color-gray);
+  border-color: var(--color-gray-soft);
 }
 
 .light a,

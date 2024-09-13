@@ -9,8 +9,9 @@
   --color-indigo-soft: #5c6bc0;
   --color-indigo-mute: #3949ab;
   --color-gray: #9e9e9e;
-  --color-gray-soft: #bdbdbd;
+  --color-gray-soft: #cccccc;
   --color-gray-mute: #757575;
 
   --width-sider: 200px;
+  --padding-thirty-pixel: 30px;
 }

@@ -439,10 +439,12 @@ const User = () => {
       </Form>
       <Divider orientation="center">💙💙💙</Divider>
       <FlexoTable
-        upperBtnsConfig={{
-          label: '新建用户',
-          type: 'primary',
-          onClick: handleCreate,
+        flexoConfig={{
+          upperButtons: {
+            showText: '新建用户',
+            type: 'primary',
+            onClick: handleCreate,
+          },
         }}
         bordered
         columns={columns}

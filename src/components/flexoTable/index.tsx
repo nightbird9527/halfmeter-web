@@ -4,6 +4,7 @@ import {FilterOutlined} from '@ant-design/icons';
 import * as XLSX from 'xlsx';
 import type {FlexoButton, FlexoTableProps} from './types';
 import {getTypeOf} from '@/utils/tools';
+import {useThemeStore} from '@/zustand';
 import './index.scss';
 
 /**
@@ -19,6 +20,7 @@ import './index.scss';
  */
 const FlexoTable: React.FC<FlexoTableProps> = (props) => {
   const {flexoConfig = {}, columns = [], ...restProps} = props;
+  const {themeFlag} = useThemeStore();
 
   // #region 列过滤器
   // Dropdown开关
@@ -55,14 +57,14 @@ const FlexoTable: React.FC<FlexoTableProps> = (props) => {
   });
   const dropdownRender = () => {
     return (
-      <div style={{border: '1px solid #ccc', borderRadius: '4px'}}>
+      <div className={themeFlag} style={{border: '1px solid #ccc', borderRadius: '10px', overflow: 'hidden'}}>
         <div style={{width: '100%'}}>
           <Checkbox.Group value={checkedColumns} onChange={handleGroupChange} style={{width: '100%'}}>
-            <Menu items={menuItems} style={{width: '100%'}}></Menu>
+            <Menu items={menuItems} style={{width: '100%', boxShadow: 'none'}}></Menu>
           </Checkbox.Group>
         </div>
         <Divider style={{margin: '0'}} />
-        <div style={{padding: '16px'}}>
+        <div style={{padding: '8px 16px'}}>
           <Checkbox checked={isCheckedAll} onChange={handleSelectAllChange}>
             Select All
           </Checkbox>

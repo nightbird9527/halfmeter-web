@@ -1,7 +1,6 @@
 .center {
   display: flex;
   height: 100%;
-  // min-height: 900px;
   border-top-width: 1px;
   border-top-style: solid;
   border-bottom-width: 1px;
@@ -9,6 +8,7 @@
 
   .center-sider {
     width: var(--width-sider);
+    padding-top: calc(var(--padding-thirty-pixel) / 2);
     border-right-width: 1px;
     border-right-style: solid;
   }
@@ -17,11 +17,13 @@
     flex: 1;
 
     .center-main-breadcrumb {
-      padding: 15px;
+      padding: calc(var(--padding-thirty-pixel) / 2) var(--padding-thirty-pixel);
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
     }
 
     .center-main-content {
-      padding: 20px;
+      padding: var(--padding-thirty-pixel);
     }
   }
 }
