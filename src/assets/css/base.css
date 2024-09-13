@@ -1,0 +1,47 @@
+@import './variables.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+.clearfix::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* 亮色主题 start */
+.light {
+  color: var(--color-black);
+  background-color: var(--color-white);
+  border-color: var(--color-gray);
+}
+
+.light a,
+.light a:hover,
+.light a:visited,
+.light a:active {
+  color: var(--color-black) !important;
+  text-decoration: none;
+}
+/* 亮色主题 end */
+
+/* 暗色主题 start */
+.dark {
+  color: var(--color-white);
+  background-color: var(--color-black);
+  border-color: var(--color-black-mute);
+}
+
+.dark a,
+.dark a:hover,
+.dark a:visited,
+.dark a:active {
+  color: var(--color-white) !important;
+  text-decoration: none;
+}
+/* 暗色主题 end */

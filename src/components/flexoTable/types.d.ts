@@ -6,10 +6,9 @@ export type FlexoButton = ButtonProps & {
 
 export interface FlexoConfig {
   upperButtons?: FlexoButton | FlexoButton[];
-  download?: {
+  downloadConf?: {
     url: string;
     filename: string;
-    columns: any[];
   };
 }
 

@@ -13,12 +13,12 @@ const router = createBrowserRouter(topRoutes, {
 });
 
 export default function App() {
-  const antdTheme = useThemeStore((state) => state.antdTheme);
+  const antdToken = useThemeStore((state: any) => state.antdToken);
 
   return (
-    <ConfigProvider locale={locale} theme={antdTheme}>
+    <ConfigProvider locale={locale} theme={antdToken}>
       <AntdApp style={{height: '100%'}}>
-        <RouterProvider router={router} fallbackElement={<p>Initial Loading...</p>} />;
+        <RouterProvider router={router} fallbackElement={<p>Initial Loading...</p>} />
       </AntdApp>
     </ConfigProvider>
   );

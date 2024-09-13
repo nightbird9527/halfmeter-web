@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
+import {Route, Navigate} from 'react-router-dom';
 
 import HomePage from 'src/pages/home';
 import TagManage from 'src/pages/tag';
@@ -14,6 +14,7 @@ export default (
     <Route path="home" Component={HomePage}></Route>
     <Route path="tagManage" Component={TagManage}></Route>
     <Route path="articalManage" Component={ArticalManage}></Route>
+    <Route path="authorityManage" element={<Navigate to="userManage" />}></Route>
     <Route path="authorityManage">
       <Route path="userManage" Component={UserManage}></Route>
       <Route path="roleManage" Component={RoleManage}></Route>

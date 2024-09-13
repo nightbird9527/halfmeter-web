@@ -4,10 +4,8 @@
 
 import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import {Modal} from 'antd';
-import contants from 'src/constants';
+import {USER_INFO} from 'src/constants';
 import {localStore} from 'src/utils';
-
-const {USER_INFO} = contants;
 
 export interface AxiosResponseData extends AxiosResponse {
   resOutput: {
@@ -54,7 +52,7 @@ class Request {
               content: resOutput.msg,
               onOk: () => {
                 localStore.remove(USER_INFO);
-                location.href = '/admin/login';
+                location.href = '/login';
               },
             });
           }

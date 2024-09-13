@@ -3,7 +3,7 @@ import {createRoutesFromElements, Route, Navigate} from 'react-router-dom';
 import Login from '@/pages/login';
 import Layout from '@/pages/layout';
 import NotFound from '@/pages/notFound';
-import LayoutRoutes from './layout';
+import LayoutRoutes from './layout/indexRoutes';
 
 export default createRoutesFromElements(
   <Route>

@@ -1,0 +1,16 @@
+:root {
+  --color-white: #ffffff;
+  --color-white-soft: #f8f8f8;
+  --color-white-mute: #f2f2f2;
+  --color-black: #141414;
+  --color-black-soft: #333333;
+  --color-black-mute: #282828;
+  --color-indigo: #3f51b5;
+  --color-indigo-soft: #5c6bc0;
+  --color-indigo-mute: #3949ab;
+  --color-gray: #9e9e9e;
+  --color-gray-soft: #bdbdbd;
+  --color-gray-mute: #757575;
+
+  --width-sider: 200px;
+}

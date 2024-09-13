@@ -76,6 +76,7 @@
     "react-icons": "^4.10.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zustand": "^4.3.9"
   }
 }

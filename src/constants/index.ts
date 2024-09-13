@@ -1,8 +1,3 @@
-export { default as themeConfig } from './themeConfig'
-export type {IThemeConfig, ITheme, ThemeFlagType} from './interface'
+export {darkToken, lightToken} from './antdToken';
 
-const USER_INFO: string = 'user_info'; // 用户信息
-
-export default {
-    USER_INFO
-}
+export const USER_INFO: string = 'user_info'; // 用户信息

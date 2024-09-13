@@ -4,11 +4,10 @@ import {LockFilled, UserOutlined} from '@ant-design/icons';
 import {useNavigate} from 'react-router-dom';
 import {AxiosResponseData, localStore} from 'utils';
 import {reqUserLogin, reqTouristLogin} from 'src/services';
-import contants from 'src/constants';
+import {USER_INFO} from 'src/constants';
 import './index.scss';
 
 const FormItem = Form.Item;
-const {USER_INFO} = contants;
 
 const Login: React.FC = () => {
   const navigate = useNavigate();

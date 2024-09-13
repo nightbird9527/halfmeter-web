@@ -27,7 +27,7 @@ export interface IMenuRouteConfigItem {
   index?: boolean;
 }
 
-const menuRoutesConfig = [
+const routesList = [
   {
     label: '首页',
     path: 'home',
@@ -81,4 +81,4 @@ const menuRoutesConfig = [
   },
 ];
 
-export default menuRoutesConfig;
+export default routesList;

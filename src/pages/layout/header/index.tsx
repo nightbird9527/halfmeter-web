@@ -1,33 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {Layout, Dropdown, Switch, Space, Button, theme} from 'antd';
+import {Dropdown, Switch, Space, Button, theme} from 'antd';
 import {BsFillSunFill, BsFillMoonFill} from 'react-icons/bs';
 import {FaUserLarge, FaLocationDot, FaTemperatureFull} from 'react-icons/fa6';
 import {TiWeatherCloudy} from 'react-icons/ti';
 import {useNavigate} from 'react-router-dom';
-import constants from 'src/constants';
+import {USER_INFO} from 'src/constants';
 import {localStore} from 'src/utils';
 import {useThemeStore} from 'src/zustand';
 import {reqFetchWeather} from 'src/services';
 import './index.scss';
-import Login from 'src/pages/login';
 
-const {Header} = Layout;
-const {USER_INFO} = constants;
-
-interface IHeaderBarProps {
-  headerStyle: any;
-}
-const HeaderBar: React.FC<IHeaderBarProps> = (props) => {
-  const {
-    headerStyle: {headerBgColor, headerTextColor, headerBorderColor},
-  } = props;
-
+const Header = () => {
   const navigate = useNavigate();
-  const {
-    token: {colorPrimary},
-  } = theme.useToken();
   const userInfo = localStore.get(USER_INFO);
-  const setTheme = useThemeStore((state) => state.setTheme);
+
+  // #region 天气查询
   const [weatherInfo, setWeatherInfo] = useState({
     city: '',
     name: '',
@@ -35,8 +22,6 @@ const HeaderBar: React.FC<IHeaderBarProps> = (props) => {
     wind: '',
     temp: '',
   });
-
-  // 天气查询接口请求函数
   const fetchWeather = () => {
     reqFetchWeather()
       .then((res) => {
@@ -45,9 +30,9 @@ const HeaderBar: React.FC<IHeaderBarProps> = (props) => {
             result: {forecasts, location, now},
           },
         } = res;
-        console.log('forecasts', forecasts);
-        console.log('location', location);
-        console.log('now', now);
+        // console.log('forecasts', forecasts);
+        // console.log('location', location);
+        // console.log('now', now);
         setWeatherInfo({
           city: location.city || '',
           name: location.name || '',
@@ -60,18 +45,23 @@ const HeaderBar: React.FC<IHeaderBarProps> = (props) => {
         console.log(error);
       });
   };
-
   useEffect(() => {
     fetchWeather();
   }, []);
+  // #endregion
 
-  // 主题开关
-  const handleThemeSwitchChange = (checked) => {
+  // #region 主题切换
+  const {themeFlag, setThemeFlag, setAntdToken} = useThemeStore();
+  const handleThemeSwitchChange = (checked: boolean) => {
     if (checked) {
-      return setTheme('dark');
+      return setThemeFlag('dark'), setAntdToken('dark');
     }
-    setTheme('light');
+    setThemeFlag('light'), setAntdToken('light');
   };
+  const {
+    token: {colorPrimary},
+  } = theme.useToken();
+  // #endregion
 
   // 用户资料
   const handleUserProfileClick = (e) => {
@@ -85,7 +75,7 @@ const HeaderBar: React.FC<IHeaderBarProps> = (props) => {
     if (e) {
       e.preventDefault();
     }
-    setTheme('dark');
+    setThemeFlag('dark');
     localStore.remove(USER_INFO);
     navigate('/login');
   };
@@ -94,33 +84,33 @@ const HeaderBar: React.FC<IHeaderBarProps> = (props) => {
   const userDropDownRender = () => {
     return (
       <div
+        className={themeFlag}
         style={{
           padding: '10px 10px',
-          backgroundColor: headerBgColor,
-          border: `1px solid ${headerBorderColor}`,
+          borderWidth: '1px',
+          borderStyle: 'solid',
           borderRadius: '10px',
         }}
       >
         <Space direction="vertical">
-          <Button style={{color: headerTextColor}} onClick={handleUserProfileClick}>
-            用户资料
-          </Button>
-          <Button style={{color: headerTextColor}} onClick={handleLogoutClick}>
-            退出登陆
-          </Button>
+          <Button onClick={handleUserProfileClick}>用户资料</Button>
+          <Button onClick={handleLogoutClick}>退出登陆</Button>
         </Space>
       </div>
     );
   };
 
   return (
-    <Header
-      className="header"
-      style={{color: headerTextColor, backgroundColor: headerBgColor, borderBottom: `1px solid ${headerBorderColor}`}}
+    <div
+      className={`header ${themeFlag}`}
+      // style={{color: headerTextColor, backgroundColor: headerBgColor, borderBottom: `1px solid ${headerBorderColor}`}}
     >
       <div className="header-logo">
         <h1>
-          <a href="http://localhost:3000/" style={{color: headerTextColor}}>
+          <a
+            href="http://localhost:3000/"
+            // style={{color: headerTextColor}}
+          >
             半米之内
           </a>
         </h1>
@@ -155,14 +145,14 @@ const HeaderBar: React.FC<IHeaderBarProps> = (props) => {
       </div>
       <div className="header-user">
         <Dropdown dropdownRender={userDropDownRender} placement="bottom">
-          <span style={{color: headerTextColor}} className="header-user-detail">
+          <span className="header-user-detail">
             <FaUserLarge style={{color: colorPrimary, margin: '0 5px'}} />
             {userInfo && userInfo.userName}
           </span>
         </Dropdown>
       </div>
-    </Header>
+    </div>
   );
 };
 
-export default HeaderBar;
+export default Header;

@@ -12,6 +12,7 @@ const Resource = () => {
       name: 'John Brown',
       age: 32,
       sex: '男',
+      email: 'jon@example.com',
     },
   ]);
   const [tableLoading, setTableLoading] = useState(false);
@@ -94,6 +95,10 @@ const Resource = () => {
             showText: '新增',
             type: 'primary',
             onClick: handleCreate,
+          },
+          downloadConf: {
+            url: '/api/download',
+            filename: 'resource.xlsx',
           },
         }}
         bordered
