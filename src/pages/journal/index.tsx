@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {Space, Button, Form, Input, Row, Col, Divider, Modal, App, DatePicker} from 'antd';
 import {FlexoTable} from 'src/components';
 import {reqFetchJournalList, reqCreateJournal, reqUpdateJournal, reqDeleteJournal} from 'src/services/journalService';
-import {AxiosResponseData} from 'utils';
 import dayjs from 'dayjs';
 import './index.scss';
 
@@ -93,11 +92,11 @@ const JournalManage = () => {
       pageSize,
     };
     reqFetchJournalList(input)
-      .then((res: AxiosResponseData) => {
-        const {total, dataList} = res.resOutput.data;
+      .then((res) => {
+        const {total, rows} = res.data;
         setQueryParams({...values});
         setPageInfo({current: pageNo, pageSize, total});
-        setDataSource(dataList || []);
+        setDataSource(rows || []);
       })
       .catch((error) => {
         modal.error({
@@ -190,9 +189,8 @@ const JournalManage = () => {
           journalId: record.journalId,
         };
         reqDeleteJournal(payload)
-          .then((res: AxiosResponseData) => {
-            const {resOutput} = res;
-            message.success(resOutput.msg);
+          .then((res) => {
+            message.success(res.msg);
             const queryPayload = {
               values: {...queryParams},
               pageNo: pageInfo.current,
@@ -218,9 +216,8 @@ const JournalManage = () => {
           content: values.content_modal,
         };
         reqCreateJournal(payload)
-          .then((res: AxiosResponseData) => {
-            const {resOutput} = res;
-            message.success(resOutput.msg);
+          .then((res) => {
+            message.success(res.msg);
             closeModal();
             const queryPayload = {
               values: {...queryParams},
@@ -242,9 +239,8 @@ const JournalManage = () => {
           content: values.content_modal,
         };
         reqUpdateJournal(payload)
-          .then((res: AxiosResponseData) => {
-            const {resOutput} = res;
-            message.success(resOutput.msg);
+          .then((res) => {
+            message.success(res.msg);
             closeModal();
             const queryPayload = {
               values: {...queryParams},

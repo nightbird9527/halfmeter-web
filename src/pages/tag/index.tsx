@@ -18,7 +18,6 @@ import {
 import type {Color} from 'antd/es/color-picker';
 import {FlexoTable} from 'src/components';
 import {reqFetchTagList, reqCreateTag, reqUpdateTag, reqDeleteTag} from 'src/services';
-import {AxiosResponseData} from 'utils';
 import dayjs from 'dayjs';
 import './index.scss';
 
@@ -150,10 +149,10 @@ const TagManage = () => {
     };
     reqFetchTagList(input)
       .then((res) => {
-        const {total, dataList} = res.resOutput.data;
+        const {total, rows} = res.data;
         setQueryParams({...values});
         setPageInfo({current: pageNo, pageSize, total});
-        setDataSource(dataList || []);
+        setDataSource(rows || []);
       })
       .catch((error) => {
         modal.error({
@@ -256,9 +255,8 @@ const TagManage = () => {
           tagId: record.tagId,
         };
         reqDeleteTag(payload)
-          .then((res: AxiosResponseData) => {
-            const {resOutput} = res;
-            message.success(resOutput.msg);
+          .then((res) => {
+            message.success(res.msg);
             const queryPayload = {
               values: {...queryParams},
               pageNo: pageInfo.current,
@@ -293,9 +291,8 @@ const TagManage = () => {
           color: tagColor,
         };
         reqCreateTag(payload)
-          .then((res: AxiosResponseData) => {
-            const {resOutput} = res;
-            message.success(resOutput.msg);
+          .then((res) => {
+            message.success(res.msg);
             closeModal();
             const queryPayload = {
               values: {...queryParams},
@@ -319,9 +316,8 @@ const TagManage = () => {
           color: tagColor,
         };
         reqUpdateTag(payload)
-          .then((res: AxiosResponseData) => {
-            const {resOutput} = res;
-            message.success(resOutput.msg);
+          .then((res) => {
+            message.success(res.msg);
             closeModal();
             const queryPayload = {
               values: {...queryParams},

@@ -106,10 +106,10 @@ const RoleManage = () => {
     };
     reqFetchRoleList(input)
       .then((res) => {
-        const {total, dataList} = res.resOutput.data;
+        const {total, rows} = res.data;
         setQueryParams({...values});
         setPageInfo({current: pageNo, pageSize, total});
-        setDataSource(dataList || []);
+        setDataSource(rows || []);
       })
       .catch((error) => {
         modal.error({
@@ -206,8 +206,7 @@ const RoleManage = () => {
         };
         reqDeleteRole(payload)
           .then((res) => {
-            const {resOutput} = res;
-            message.success(resOutput.msg);
+            message.success(res.msg);
             const queryPayload = {
               values: {...queryParams},
               pageNo: pageInfo.current,
@@ -239,8 +238,7 @@ const RoleManage = () => {
           };
           reqCreateRole(payload)
             .then((res) => {
-              const {resOutput} = res;
-              message.success(resOutput.msg);
+              message.success(res.msg);
               closeModal();
               const queryPayload = {
                 values: {...queryParams},
@@ -265,8 +263,7 @@ const RoleManage = () => {
           };
           reqUpdateRole(payload)
             .then((res) => {
-              const {resOutput} = res;
-              message.success(resOutput.msg);
+              message.success(res.msg);
               closeModal();
               const queryPayload = {
                 values: {...queryParams},

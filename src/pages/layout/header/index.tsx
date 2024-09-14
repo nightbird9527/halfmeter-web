@@ -25,12 +25,8 @@ const Header = () => {
   const fetchWeather = () => {
     reqFetchWeather()
       .then((res) => {
-        const {
-          resOutput: {
-            result: {forecasts, location, now},
-          },
-        } = res;
-        // console.log('forecasts', forecasts);
+        const {forecasts, location, now} = res.data.result;
+        console.log('forecasts', forecasts);
         // console.log('location', location);
         // console.log('now', now);
         setWeatherInfo({
@@ -101,18 +97,10 @@ const Header = () => {
   };
 
   return (
-    <div
-      className={`header ${themeFlag}`}
-      // style={{color: headerTextColor, backgroundColor: headerBgColor, borderBottom: `1px solid ${headerBorderColor}`}}
-    >
+    <div className={`header ${themeFlag}`}>
       <div className="header-logo">
         <h1>
-          <a
-            href="http://localhost:3000/"
-            // style={{color: headerTextColor}}
-          >
-            半米之内
-          </a>
+          <a href="http://localhost:3000/">半米之内</a>
         </h1>
       </div>
       <div className="header-theme">

@@ -88,10 +88,6 @@ const Center = () => {
       },
     ]
   );
-  console.log('crumbsMap', crumbsMap);
-
-  console.log('breadcrumbItems', breadcrumbItems);
-
   // #endregion
 
   return (
@@ -104,7 +100,6 @@ const Center = () => {
           onSelect={handleSelectChange}
           openKeys={openedMenuKeys}
           onOpenChange={handleOpenChange}
-          // style={{height: '100%'}}
         />
       </div>
       <div className="center-main">

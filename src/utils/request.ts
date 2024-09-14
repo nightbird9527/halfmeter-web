@@ -2,19 +2,11 @@
  * @description 基于axios封装的http请求模块
  */
 
-import axios, {AxiosInstance, AxiosResponse} from 'axios';
+import axios from 'axios';
+import type {AxiosInstance} from 'axios';
 import {Modal} from 'antd';
 import {USER_INFO} from 'src/constants';
 import {localStore} from 'src/utils';
-
-export interface AxiosResponseData extends AxiosResponse {
-  resOutput: {
-    data: any;
-    msg: string;
-  };
-  opeResult: 'success' | 'error';
-  tokenExpired?: boolean;
-}
 
 class Request {
   private instance: AxiosInstance;
@@ -26,13 +18,13 @@ class Request {
       timeout: 5000,
     });
 
-    // 设置请求拦截
+    // 请求拦截
     this.instance.interceptors.request.use(
       (config) => {
         const userInfo = localStore.get(USER_INFO);
         config.data = {
-          reqInput: config.data,
-          reqUserInfo: JSON.stringify(userInfo),
+          busiData: config.data, // 业务数据
+          metaData: JSON.stringify(userInfo), // 元信息，如操作者ID、操作时间等
         };
         return Promise.resolve(config);
       },
@@ -41,25 +33,25 @@ class Request {
       }
     );
 
-    // 设置响应拦截
+    // 响应拦截
     this.instance.interceptors.response.use(
       (response) => {
-        const {resOutput, opeResult, tokenExpired} = response.data;
+        const {code, msg, tokenExpired} = response.data;
         return new Promise((resolve, reject) => {
           if (tokenExpired) {
             return Modal.error({
               title: '错误',
-              content: resOutput.msg,
+              content: msg,
               onOk: () => {
                 localStore.remove(USER_INFO);
                 location.href = '/login';
               },
             });
           }
-          if (opeResult === 'error') {
-            reject({title: 'Error', message: resOutput.msg});
+          if (code === 500 || code === 400) {
+            reject({title: 'Error', message: msg});
           }
-          resolve(response);
+          resolve(response.data);
         });
       },
       (error) => {
@@ -77,7 +69,7 @@ class Request {
       this.instance
         .post(url, params)
         .then((res) => {
-          resolve(res.data);
+          resolve(res);
         })
         .catch((error) => {
           reject(error);
@@ -90,7 +82,7 @@ class Request {
       this.instance
         .post(url, params)
         .then((res) => {
-          resolve(res.data);
+          resolve(res);
         })
         .catch((error) => {
           reject(error);

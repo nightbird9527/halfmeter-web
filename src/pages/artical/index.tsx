@@ -132,10 +132,9 @@ const ArticalManage = () => {
       pageSize: 100,
     };
     reqFetchTagList(input)
-      .then((res: any) => {
-        const {dataList} = res.resOutput.data;
-        console.log('dataList-tags', dataList);
-        setTagList(dataList || []);
+      .then((res) => {
+        const {rows} = res.data;
+        setTagList(rows || []);
       })
       .catch((error) => {
         modal.error({
@@ -159,12 +158,11 @@ const ArticalManage = () => {
       pageSize,
     };
     reqFetchArticalList(input)
-      .then((res: any) => {
-        const {total, dataList} = res.resOutput.data;
-        console.log('dataList-articals', dataList);
+      .then((res) => {
+        const {total, rows} = res.data;
         setQueryParams({...values});
         setPageInfo({current: pageNo, pageSize, total});
-        setArticalList(dataList || []);
+        setArticalList(rows || []);
       })
       .catch((error) => {
         modal.error({
@@ -259,9 +257,8 @@ const ArticalManage = () => {
           articalId: record.articalId,
         };
         reqDeleteArtical(payload)
-          .then((res: any) => {
-            const {resOutput} = res;
-            message.success(resOutput.msg);
+          .then((res) => {
+            message.success(res.msg);
             const queryPayload = {
               values: {...queryParams},
               pageNo: pageInfo.current,
@@ -301,7 +298,6 @@ const ArticalManage = () => {
       if (editorIsEmpty) {
         return message.warning('请编辑文章内容');
       }
-      console.log('modal-values', values);
       if (operateType === 'create') {
         const input = {
           title: values.title_modal,
@@ -310,9 +306,8 @@ const ArticalManage = () => {
           content: editorContent,
         };
         reqCreateArtical(input)
-          .then((res: any) => {
-            const {resOutput} = res;
-            message.success(resOutput.msg);
+          .then((res) => {
+            message.success(res.msg);
             closeModal();
             const queryPayload = {
               values: {...queryParams},
@@ -337,9 +332,8 @@ const ArticalManage = () => {
           content: editorContent,
         };
         reqUpdateArtical(input)
-          .then((res: any) => {
-            const {resOutput} = res;
-            message.success(resOutput.msg);
+          .then((res) => {
+            message.success(res.msg);
             closeModal();
             const queryPayload = {
               values: {...queryParams},

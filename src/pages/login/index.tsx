@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Form, Button, Input, Row, Col, App} from 'antd';
 import {LockFilled, UserOutlined} from '@ant-design/icons';
 import {useNavigate} from 'react-router-dom';
-import {AxiosResponseData, localStore} from 'utils';
+import {localStore} from 'utils';
 import {reqUserLogin, reqTouristLogin} from 'src/services';
 import {USER_INFO} from 'src/constants';
 import './index.scss';
@@ -30,10 +30,8 @@ const Login: React.FC = () => {
       password: values.password,
     };
     reqUserLogin(params)
-      .then((res: AxiosResponseData) => {
-        const {
-          resOutput: {data, msg},
-        } = res;
+      .then((res) => {
+        const {data, msg} = res;
         message.success(msg);
         localStore.set(USER_INFO, data);
         navigate('/');

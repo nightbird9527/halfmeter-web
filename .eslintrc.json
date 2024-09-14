@@ -14,10 +14,10 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint", "react"],
-  "ignorePatterns": ["node_modules/**/*", "dist/**/*"],
+  "ignorePatterns": ["node_modules/**/*", "build/**/*"],
   "rules": {
     "eqeqeq": "error",
     "no-duplicate-imports": "off",
-    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }
