@@ -21,3 +21,8 @@
     margin: 10px 0;
   }
 }
+
+// 覆盖默认的 antd 分页样式
+.flexo-table .flexo-table-main .ant-table-pagination.ant-pagination {
+  margin-bottom: 0;
+}

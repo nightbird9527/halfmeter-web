@@ -19,7 +19,7 @@ import './index.scss';
  * @returns {React.ReactElement}
  */
 const FlexoTable: React.FC<FlexoTableProps> = (props) => {
-  const {flexoConfig = {}, columns = [], ...restProps} = props;
+  const {flexoConfig = {}, columns = [], pagination = {}, scroll = {x: 'max-content'}, ...restProps} = props;
   const {themeFlag} = useThemeStore();
 
   // #region 列过滤器
@@ -58,7 +58,7 @@ const FlexoTable: React.FC<FlexoTableProps> = (props) => {
   const dropdownRender = () => {
     return (
       <div className={themeFlag} style={{border: '1px solid #ccc', borderRadius: '10px', overflow: 'hidden'}}>
-        <div style={{width: '100%'}}>
+        <div style={{width: '100%', maxHeight: '200px', overflow: 'auto'}}>
           <Checkbox.Group value={checkedColumns} onChange={handleGroupChange} style={{width: '100%'}}>
             <Menu items={menuItems} style={{width: '100%', boxShadow: 'none'}}></Menu>
           </Checkbox.Group>
@@ -127,6 +127,17 @@ const FlexoTable: React.FC<FlexoTableProps> = (props) => {
   };
   // #endregion
 
+  // #region 表格默认配置项
+  // 默认分页配置项
+  const defaultPagination = {
+    current: 1,
+    pageSize: 10,
+    total: 0,
+    showTotal: (total: number) => `共 ${total} 条`,
+    showSizeChanger: true,
+    pageSizeOptions: ['10', '20', '30', '40'],
+  };
+  // #endregion
   return (
     <div className="flexo-table">
       <div className="flexo-table-upper clearfix">
@@ -152,7 +163,12 @@ const FlexoTable: React.FC<FlexoTableProps> = (props) => {
         </div>
       </div>
       <div className="flexo-table-main">
-        <Table columns={filteredColumns} {...restProps} />
+        <Table
+          columns={filteredColumns}
+          pagination={{...defaultPagination, ...pagination}}
+          scroll={{...scroll}}
+          {...restProps}
+        />
       </div>
     </div>
   );

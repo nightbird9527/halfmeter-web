@@ -1,6 +1,6 @@
 import {request} from 'utils';
 
-const baseURL = '/authority/user';
+const baseURL = '/systemManage/userManage';
 
 // 查询用户列表
 export const reqFetchUserList = (payload: any) => {

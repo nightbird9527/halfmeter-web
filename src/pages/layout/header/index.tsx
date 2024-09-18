@@ -5,14 +5,13 @@ import {FaUserLarge, FaLocationDot, FaTemperatureFull} from 'react-icons/fa6';
 import {TiWeatherCloudy} from 'react-icons/ti';
 import {useNavigate} from 'react-router-dom';
 import {USER_INFO} from 'src/constants';
-import {localStore} from 'src/utils';
 import {useThemeStore} from 'src/zustand';
 import {reqFetchWeather} from 'src/services';
 import './index.scss';
 
 const Header = () => {
   const navigate = useNavigate();
-  const userInfo = localStore.get(USER_INFO);
+  const userInfo = JSON.parse(localStorage.getItem(USER_INFO) || '{}');
 
   // #region 天气查询
   const [weatherInfo, setWeatherInfo] = useState({
@@ -72,7 +71,7 @@ const Header = () => {
       e.preventDefault();
     }
     setThemeFlag('dark');
-    localStore.remove(USER_INFO);
+    localStorage.removeItem(USER_INFO);
     navigate('/login');
   };
 

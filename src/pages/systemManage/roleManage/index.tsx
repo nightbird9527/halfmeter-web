@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Space, Button, Form, Input, Select, Row, Col, Divider, Modal, App} from 'antd';
+import {Space, Button, Form, Input, Select, Row, Col, Divider, Modal, App, Drawer} from 'antd';
 import {FlexoTable} from 'src/components';
 import {reqFetchRoleList, reqCreateRole, reqUpdateRole, reqDeleteRole} from 'src/services';
 import './index.scss';
@@ -14,17 +14,6 @@ const statusMap = {
 const RoleManage = () => {
   const [form] = Form.useForm();
   const {modal, message} = App.useApp();
-  const [queryParams, setQueryParams] = useState({});
-  const [tableLoading, setTableLoading] = useState(false);
-  const [dataSource, setDataSource] = useState([]);
-  const [recordData, setRecordData] = useState({} as any);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [operateType, setOperateType] = useState('create');
-  const [pageInfo, setPageInfo] = useState({
-    current: 1,
-    pageSize: 10,
-    total: 0,
-  });
 
   const columns: any = [
     {
@@ -80,6 +69,14 @@ const RoleManage = () => {
               编辑
             </Button>
             <Button
+              type="primary"
+              onClick={() => {
+                handleAssign(args[1]);
+              }}
+            >
+              资源分配
+            </Button>
+            <Button
               danger
               onClick={() => {
                 handleDelete(args[1]);
@@ -93,7 +90,10 @@ const RoleManage = () => {
     },
   ];
 
-  // 角色列表查询接口请求函数
+  // #region 角色列表查询接口请求
+  const [queryParams, setQueryParams] = useState({});
+  const [tableLoading, setTableLoading] = useState(false);
+  const [dataSource, setDataSource] = useState([]);
   const fetchRoleList = (payload: any) => {
     setTableLoading(true);
     const {values, pageNo, pageSize} = payload;
@@ -121,7 +121,6 @@ const RoleManage = () => {
         setTableLoading(false);
       });
   };
-
   useEffect(() => {
     const payload = {
       values: {},
@@ -130,8 +129,9 @@ const RoleManage = () => {
     };
     fetchRoleList(payload);
   }, []);
+  // #endregion
 
-  // 查询
+  // #region 查询 & 重置
   const handleSubmit = () => {
     form.validateFields(['roleName', 'description', 'status']).then((values) => {
       const payload = {
@@ -142,13 +142,17 @@ const RoleManage = () => {
       fetchRoleList(payload);
     });
   };
-
-  // 重置
   const handleReset = () => {
     form.resetFields();
   };
+  // #endregion
 
-  // 翻页
+  // #region 分页
+  const [pageInfo, setPageInfo] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
   const handlePageChange = (pageNo, pageSize) => {
     if (pageSize !== pageInfo.pageSize) {
       pageNo = 1;
@@ -160,20 +164,21 @@ const RoleManage = () => {
     };
     fetchRoleList(payload);
   };
+  // #endregion
 
-  // 新建
+  // #region 新建 & 编辑
+  const [recordData, setRecordData] = useState({} as any);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [operateType, setOperateType] = useState('create');
   const handleCreate = () => {
     setOperateType('create');
     setModalVisible(true);
   };
-
-  // 编辑
   const handleUpdate = (record: any) => {
     setRecordData(record);
     setOperateType('update');
     setModalVisible(true);
   };
-
   useEffect(() => {
     if (modalVisible) {
       if (operateType === 'create') {
@@ -194,37 +199,6 @@ const RoleManage = () => {
       form.resetFields(['title_modal', 'status_modal', 'color_modal']);
     }
   }, [modalVisible]);
-
-  // 删除
-  const handleDelete = (record: any) => {
-    modal.confirm({
-      title: '提示',
-      content: '确认要删除该角色吗？',
-      onOk: () => {
-        const payload = {
-          roleId: record.roleId,
-        };
-        reqDeleteRole(payload)
-          .then((res) => {
-            message.success(res.msg);
-            const queryPayload = {
-              values: {...queryParams},
-              pageNo: pageInfo.current,
-              pageSize: pageInfo.pageSize,
-            };
-            fetchRoleList(queryPayload);
-          })
-          .catch((error) => {
-            modal.error({
-              title: error.title,
-              content: error.message,
-            });
-          });
-      },
-    });
-  };
-
-  // Modal保存
   const handleModalSave = () => {
     const fieldNames = ['roleName_modal', 'description_modal', 'status_modal'];
     form
@@ -284,10 +258,47 @@ const RoleManage = () => {
         console.log('validateFailed:', error);
       });
   };
-
-  // 关闭Modal
   const closeModal = () => {
     setModalVisible(false);
+  };
+  // #endregion
+
+  // #region 资源分配
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const handleAssign = (record: any) => {
+    console.log(record);
+    setRecordData(record);
+    setDrawerOpen(true);
+  };
+  // #endregion
+
+  // 删除
+  const handleDelete = (record: any) => {
+    modal.confirm({
+      title: '提示',
+      content: '确认要删除该角色吗？',
+      onOk: () => {
+        const payload = {
+          roleId: record.roleId,
+        };
+        reqDeleteRole(payload)
+          .then((res) => {
+            message.success(res.msg);
+            const queryPayload = {
+              values: {...queryParams},
+              pageNo: pageInfo.current,
+              pageSize: pageInfo.pageSize,
+            };
+            fetchRoleList(queryPayload);
+          })
+          .catch((error) => {
+            modal.error({
+              title: error.title,
+              content: error.message,
+            });
+          });
+      },
+    });
   };
 
   // 角色状态opts
@@ -298,7 +309,6 @@ const RoleManage = () => {
       </Option>
     );
   });
-
   return (
     <div className="role">
       <Form form={form} onFinish={handleSubmit}>
@@ -391,6 +401,16 @@ const RoleManage = () => {
             </Form>
           </div>
         </Modal>
+      )}
+      {drawerOpen && (
+        <Drawer
+          width={800}
+          title={`资源分配-${recordData.description}`}
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        >
+          123
+        </Drawer>
       )}
     </div>
   );

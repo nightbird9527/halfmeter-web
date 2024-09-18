@@ -1,12 +1,14 @@
 .center {
   display: flex;
-  height: 100%;
+  width: 100%;
+  min-height: 900px;
   border-top-width: 1px;
   border-top-style: solid;
   border-bottom-width: 1px;
   border-bottom-style: solid;
 
   .center-sider {
+    flex: 0 0 var(--width-sider);
     width: var(--width-sider);
     padding-top: calc(var(--padding-thirty-pixel) / 2);
     border-right-width: 1px;
@@ -15,6 +17,9 @@
 
   .center-main {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: calc(100% - var(--width-sider));
 
     .center-main-breadcrumb {
       padding: calc(var(--padding-thirty-pixel) / 2) var(--padding-thirty-pixel);
@@ -23,7 +28,20 @@
     }
 
     .center-main-content {
-      padding: var(--padding-thirty-pixel);
+      flex: 1;
+      padding: calc(var(--padding-thirty-pixel) / 2);
+      border-radius: 20px;
+
+      .center-main-content-container {
+        height: 100%;
+        padding: var(--padding-thirty-pixel) calc(var(--padding-thirty-pixel) / 2);
+        border-radius: 20px;
+        transition: all 0.5s;
+
+        &:hover {
+          box-shadow: 0 0 10px #888;
+        }
+      }
     }
   }
 }

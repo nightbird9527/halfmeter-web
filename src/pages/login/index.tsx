@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {Form, Button, Input, Row, Col, App} from 'antd';
 import {LockFilled, UserOutlined} from '@ant-design/icons';
 import {useNavigate} from 'react-router-dom';
-import {localStore} from 'utils';
 import {reqUserLogin, reqTouristLogin} from 'src/services';
 import {USER_INFO} from 'src/constants';
 import './index.scss';
@@ -12,7 +11,7 @@ const FormItem = Form.Item;
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const {modal, message} = App.useApp();
-  const userInfo = localStore.get(USER_INFO);
+  const userInfo = JSON.parse(localStorage.getItem(USER_INFO) || '{}');
 
   // 如果用户已经登陆，重定向到首页
   useEffect(() => {
@@ -33,7 +32,7 @@ const Login: React.FC = () => {
       .then((res) => {
         const {data, msg} = res;
         message.success(msg);
-        localStore.set(USER_INFO, data);
+        localStorage.setItem(USER_INFO, JSON.stringify(data || {}));
         navigate('/');
       })
       .catch((error) => {

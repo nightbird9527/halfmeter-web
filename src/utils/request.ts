@@ -6,7 +6,6 @@ import axios from 'axios';
 import type {AxiosInstance} from 'axios';
 import {Modal} from 'antd';
 import {USER_INFO} from 'src/constants';
-import {localStore} from 'src/utils';
 
 class Request {
   private instance: AxiosInstance;
@@ -21,10 +20,9 @@ class Request {
     // 请求拦截
     this.instance.interceptors.request.use(
       (config) => {
-        const userInfo = localStore.get(USER_INFO);
         config.data = {
           busiData: config.data, // 业务数据
-          metaData: JSON.stringify(userInfo), // 元信息，如操作者ID、操作时间等
+          metaData: localStorage.getItem(USER_INFO), // 元信息，如操作者ID、操作时间等
         };
         return Promise.resolve(config);
       },
@@ -43,7 +41,7 @@ class Request {
               title: '错误',
               content: msg,
               onOk: () => {
-                localStore.remove(USER_INFO);
+                localStorage.removeItem(USER_INFO);
                 location.href = '/login';
               },
             });

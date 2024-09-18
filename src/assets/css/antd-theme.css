@@ -1,0 +1,19 @@
+/**
+ * 修改antd组件的默认样式，使其根据主题动态切换
+*/
+
+/* #region Drawer组件 */
+.dark .ant-drawer-content .ant-drawer-header,
+.dark .ant-drawer-content .ant-drawer-body {
+  color: var(--color-white);
+  background-color: var(--color-black);
+  border-color: var(--color-black-mute);
+}
+
+.light .ant-drawer-content .ant-drawer-header,
+.light .ant-drawer-content .ant-drawer-body {
+  color: var(--color-black);
+  background-color: var(--color-white);
+  border-color: var(--color-gray-soft);
+}
+/* #endregion */

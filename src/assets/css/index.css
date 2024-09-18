@@ -1,4 +1,5 @@
-@import './base.css';
+@import './theme.css';
+@import './antd-theme.css';
 
 html {
   height: 100%;
@@ -13,4 +14,19 @@ body {
 
 #root {
   height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+/* 使用clearfix类名清除浮动 */
+.clearfix::after {
+  content: '';
+  display: block;
+  clear: both;
 }

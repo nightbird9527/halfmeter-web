@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {RouterProvider, createBrowserRouter} from 'react-router-dom';
 import {ConfigProvider, App as AntdApp} from 'antd';
 import locale from 'antd/locale/zh_CN';
@@ -13,7 +13,11 @@ const router = createBrowserRouter(topRoutes, {
 });
 
 export default function App() {
-  const antdToken = useThemeStore((state: any) => state.antdToken);
+  const {themeFlag, antdToken} = useThemeStore();
+
+  useEffect(() => {
+    document.body.className = themeFlag;
+  }, [themeFlag]);
 
   return (
     <ConfigProvider locale={locale} theme={antdToken}>

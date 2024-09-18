@@ -107,7 +107,9 @@ const Center = () => {
           <Breadcrumb items={breadcrumbItems} />
         </div>
         <div className="center-main-content">
-          <Outlet />
+          <div className="center-main-content-container">
+            <Outlet />
+          </div>
         </div>
       </div>
     </div>

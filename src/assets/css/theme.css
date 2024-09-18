@@ -1,20 +1,6 @@
 @import './variables.css';
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
-}
-
-.clearfix::after {
-  content: '';
-  display: block;
-  clear: both;
-}
-
-/* 亮色主题 start */
+/* #region 亮色主题 */
 .light {
   color: var(--color-black);
   background-color: var(--color-white);
@@ -28,9 +14,9 @@
   color: var(--color-black) !important;
   text-decoration: none;
 }
-/* 亮色主题 end */
+/* #endregion */
 
-/* 暗色主题 start */
+/* #region 暗色主题 */
 .dark {
   color: var(--color-white);
   background-color: var(--color-black);
@@ -44,4 +30,4 @@
   color: var(--color-white) !important;
   text-decoration: none;
 }
-/* 暗色主题 end */
+/* #endregion */
